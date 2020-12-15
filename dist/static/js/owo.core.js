@@ -1,5 +1,5 @@
-// Tue Dec 15 2020 16:47:54 GMT+0800 (GMT+08:00)
-var owo = {tool: {},state: {},};
+// Wed Dec 16 2020 00:27:06 GMT+0800 (GMT+08:00)
+var owo = {tool: {},state: {},event: {}};
 /* 方法合集 */
 var _owo = {
   isIE: (window.navigator.userAgent.indexOf("MSIE") >= 1),

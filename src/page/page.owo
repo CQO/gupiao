@@ -17,15 +17,26 @@
         data: {}
       }
     },
+    created: function () {
+      owo.event.login = function (userData) {
+        owo.script.page.data.userInfo = JSON.parse(userData.data)
+        owo.script.page.creatTable()
+        console.log(userData)
+      }
+      owo.script.page.creatTable()
+    },
     creatTable: function () {
       let newHtml = `<tr><th>股票代码</th><th>股票名称</th><th>当前价格</th><th>买入价格</th><th>卖出价格</th><th>应用规则</th><th>其他操作</th></tr>`
       const gupiaoData = this.data.userInfo.data
       this.data.userInfo.like.forEach(element => {
         const item = gupiaoData[element]
-        newHtml += `<tr><td>${element}</td><td>${item[0]}</td></tr>`
+        newHtml += `<tr><td>${element}</td><td>${item[0]}</td><td>${item[2]}</td><td></td><td></td><td></td><td><span o-tap="delateKey('${element}')">删除</span></td></tr>`
       })
-      console.log(this.query('table'))
+      console.log(this)
       this.query('table').innerHTML = newHtml
+      setTimeout(() => {
+        this.handleEvent(this, this.query('tbody'))
+      }, 100);
     },
     add: function () {
       var requestOptions = {
@@ -52,8 +63,21 @@
           }
           this.creatTable()
           console.log(this.data.userInfo)
+          saveUserInfo(this.data.userInfo)
         })
         .catch(error => console.log('error', error));
+    },
+    delateKey: function (key) {
+      let newList = []
+      this.data.userInfo.like.forEach(element => {
+        if (element !== 'key') {
+          newList.push(key)
+        }
+      })
+      this.data.userInfo.like = []
+      this.data.userInfo.data[key] = []
+      owo.script.page.creatTable()
+      saveUserInfo(this.data.userInfo)
     }
   }
 </script>
