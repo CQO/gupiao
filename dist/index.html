@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <!-- 页面的元信息 -->
+    <title>测试预览页面</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=1000, user-scalable=yes"/>
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="white"/>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="filetype" content="1"/>
+    <meta name="publishedtype" content="1"/>
+    <meta name="pagetype" content="2"/>
+    <meta name="description" content="{TAG_59447_TAG}"/>
+    <meta name="keywords" content="{TAG_59446_TAG}"/>
+    <meta name="catalogs" content="{TAG_83943_TAG}"/>
+    
+      <!-- 页面主样式文件 -->
+      <link charset="utf-8"  rel="stylesheet" href="./static/css/owo.core.css">
+      
+    <!-- 附属css文件 -->
+    <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
+    <link rel="stylesheet" href="https://cunchu.site/owo/style/idangerous.swiper2.7.6.css" charset="utf-8">
+      
+  </head>
+  <body>
+    
+    <!-- 页面[login]-->
+    <div class="login page" template="login" style="display: none;"><div class="router" view="loginContent"><div class="view-login" route="login"><div class="image-box"><img src="https://cunchu.site/puge/login/image-box.png"></div><div class="hellow-text">嗨，欢迎回来!</div><div class="user-name-bar input-bar"><img class="bar-icon" src="https://cunchu.site/puge/login/user.png"><input type="text" o-value="this.data.userName" placeholder="用户名"></div><div class="pass-word-bar input-bar"><img class="bar-icon" src="https://cunchu.site/puge/login/password.png"><input type="password" o-value="this.data.registerPassWord" placeholder="密码"></div><div class="button-box"><div class="button" o-tap="login" o-hover="radial-out">登录</div><div class="button" o-hover="radial-out" style=" background-color: burlywood;" go="/view-loginContent=register">注册</div></div><div class="tool-bar"><div class="left"></div><div class="right" go-route="">忘记密码</div></div></div><div class="view-register" route="register"><img class="bg-1" src="https://cunchu.site/puge/login/art.png"><p>欢迎注册PUGE账号</p><input class="register-input" type="text" o-value="this.data.registerUserName" placeholder="用户名"><input class="register-input" type="password" o-value="this.data.registerPassWord" placeholder="密码"><input class="register-input" type="password" o-value="this.data.registerPassWordR" placeholder="确认密码"><div class="mini-box clear"><input class="register-input" type="text" o-value="this.data.registerPhone" placeholder="手机号码"><div class="button" o-tap="sendSMS">发送验证码</div></div><input class="register-input" type="text" o-value="this.data.registerCode" placeholder="验证码"><div class="button" o-tap="register">注册</div></div></div></div>
+    <!-- 页面[page]-->
+    <div class="home page" template="page" style="display: none;"><div class="search-bar"><input type="text" o-value="this.data.searchText" placeholder="股票代码"><div class="button" o-tap="add">添加</div></div><div class="show-box"></div><div class="conn"><table></table></div></div>
+    
+<!-- 框架script文件 -->
+<script src="./static/js/owo.core.js" type="text/javascript" charset="UTF-8"></script>
+<script type="text/javascript" charset="UTF-8">
+// 模块 login 的script代码
+console.log(localStorage.getItem("owoUserInfo"));
+owo.script = {
+  "login": {
+    "data": {
+      "registerUserName": "",
+      "registerPassWord": "",
+      "registerPassWordR": "",
+      "registerPhone": "",
+      "registerCode": "",
+      "userName": "puge",
+      "password": "mmit7750",
+      "toast": null
+    },
+    "created": function created() {
+      if (owo.tool.toast) toast = owo.tool.toast;else toast = alert;
+    },
+    "login": function login() {
+      fetch("http://going.run/userServer?route=login", {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          type: "gupiao",
+          username: this.data.userName,
+          password: this.data.password
+        })
+      }).then(function (response) {
+        return response.json();
+      }).then(function (res) {
+        console.log(res);
+
+        if (res.err === 0) {
+          toast('登陆成功'); // do something
+
+          owo.go('page');
+          owo.state.userInfo = res.data;
+          localStorage.setItem('owoUserInfo', JSON.stringify(res.data));
+        } else {
+          toast(res.message);
+        }
+      });
+    },
+    "register": function register() {
+      if (!this.data.registerUserName) {
+        toast('用户名不能为空哦!');
+        return;
+      }
+
+      if (!this.data.registerPassWord) {
+        toast('密码不能为空哦!');
+        return;
+      }
+
+      if (!this.data.registerPassWordR) {
+        toast('重复密码不能为空哦!');
+        return;
+      }
+
+      if (!this.data.registerPhone) {
+        toast('手机号码不能为空!');
+        return;
+      }
+
+      if (this.data.registerPassWord !== this.data.registerPassWordR) {
+        toast('两次输入的密码不一致哦!');
+        return;
+      }
+
+      fetch("http://going.run/userServer?route=register", {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          phone: this.data.registerPhone,
+          username: this.data.registerUserName,
+          password: this.data.registerPassWord,
+          code: this.data.registerCode
+        })
+      }).then(function (response) {
+        return response.json();
+      }).then(function (res) {
+        if (res.err === 0) {
+          toast('注册成功!');
+          owo.go('/view-loginContent=login');
+        } else {
+          toast("\u6CE8\u518C\u5931\u8D25: " + res.message);
+        }
+      });
+    },
+    "sendSMS": function sendSMS() {
+      if (!this.data.registerPhone) {
+        alert('手机号码不能为空!');
+        return;
+      }
+
+      fetch("http://going.run/userServer?route=sendSMS", {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          phone: this.data.registerPhone
+        })
+      }).then(function (response) {
+        return response.json();
+      }).then(function (res) {
+        if (res.err === 0) {
+          toast('短信已发送!');
+        } else {
+          toast("\u77ED\u4FE1\u53D1\u9001\u5931\u8D25: " + res.message);
+        }
+      });
+    },
+    "view": {
+      "loginContent": [{
+        "_name": "login",
+        "_inherit": true
+      }, {
+        "_name": "register",
+        "_inherit": true
+      }]
+    }
+  },
+  "page": {
+    "data": {
+      "searchText": "sh600017",
+      "userInfo": {
+        "like": [],
+        "data": {}
+      }
+    },
+    "creatTable": function creatTable() {
+      var newHtml = "<tr><th>\u80A1\u7968\u4EE3\u7801</th><th>\u80A1\u7968\u540D\u79F0</th><th>\u5F53\u524D\u4EF7\u683C</th><th>\u4E70\u5165\u4EF7\u683C</th><th>\u5356\u51FA\u4EF7\u683C</th><th>\u5E94\u7528\u89C4\u5219</th><th>\u5176\u4ED6\u64CD\u4F5C</th></tr>";
+      var gupiaoData = this.data.userInfo.data;
+      this.data.userInfo.like.forEach(function (element) {
+        var item = gupiaoData[element];
+        newHtml += "<tr><td>" + element + "</td><td>" + item[0] + "</td></tr>";
+      });
+      console.log(this.query('table'));
+      this.query('table').innerHTML = newHtml;
+    },
+    "add": function add() {
+      var _this = this;
+
+      var requestOptions = {
+        method: 'POST',
+        body: JSON.stringify([this.data.searchText]),
+        redirect: 'follow'
+      };
+      fetch("https://going.run/gupiao?route=query", requestOptions).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        console.log(result);
+
+        if (result.err == 0) {
+          if (result.num > 0) {
+            for (var key in result.data) {
+              if (result.data.hasOwnProperty.call(result.data, key)) {
+                var element = result.data[key];
+
+                _this.data.userInfo.like.push(key);
+
+                _this.data.userInfo.data[key] = element;
+              }
+            }
+          } else {
+            alert('股票代码错误!');
+          }
+        }
+
+        _this.creatTable();
+
+        console.log(_this.data.userInfo);
+      })["catch"](function (error) {
+        return console.log('error', error);
+      });
+    }
+  }
+};
+</script>
+
+    <script src="https://cunchu.site/owo/script/idangerous.swiper2.7.6.min.js" type="text/javascript"  charset="UTF-8"></script>
+    <script src="./static/js/main.js" type="text/javascript"  charset="UTF-8"></script>
+
+    <script src="./static/js/toast.js" type="text/javascript"  charset="UTF-8"></script>
+  </body>
+</html>

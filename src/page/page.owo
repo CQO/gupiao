@@ -1,0 +1,85 @@
+<template lang="pug">
+.home
+  .search-bar
+    input(type="text" o-value="this.data.searchText" placeholder="股票代码")
+    .button(o-tap="add") 添加
+  .show-box
+  .conn
+    table
+</template>
+
+<script>
+  module.exports = {
+    data: {
+      searchText: 'sh600017',
+      userInfo: {
+        like: [],
+        data: {}
+      }
+    },
+    creatTable: function () {
+      let newHtml = `<tr><th>股票代码</th><th>股票名称</th><th>当前价格</th><th>买入价格</th><th>卖出价格</th><th>应用规则</th><th>其他操作</th></tr>`
+      const gupiaoData = this.data.userInfo.data
+      this.data.userInfo.like.forEach(element => {
+        const item = gupiaoData[element]
+        newHtml += `<tr><td>${element}</td><td>${item[0]}</td></tr>`
+      })
+      console.log(this.query('table'))
+      this.query('table').innerHTML = newHtml
+    },
+    add: function () {
+      var requestOptions = {
+        method: 'POST',
+        body: JSON.stringify([this.data.searchText]),
+        redirect: 'follow'
+      };
+      fetch("https://going.run/gupiao?route=query", requestOptions)
+        .then(response => response.json())
+        .then((result) => {
+          console.log(result)
+          if (result.err == 0) {
+            if (result.num > 0) {
+              for (const key in result.data) {
+                if (result.data.hasOwnProperty.call(result.data, key)) {
+                  const element = result.data[key];
+                  this.data.userInfo.like.push(key)
+                  this.data.userInfo.data[key] = element
+                }
+              }
+            } else {
+              alert('股票代码错误!')
+            }
+          }
+          this.creatTable()
+          console.log(this.data.userInfo)
+        })
+        .catch(error => console.log('error', error));
+    }
+  }
+</script>
+
+
+<style lang="less">
+.search-bar {
+  display: flex;
+  height: 35px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px;
+  background-color: ghostwhite;
+  input {
+    height: 25px;
+    padding: 0 5px;
+  }
+}
+.button {
+  display: block;
+  line-height: 28px;
+  background-color: #009fe9;
+  color: white;
+  padding: 0 10px;
+  margin: 0 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+</style>
