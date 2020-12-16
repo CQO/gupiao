@@ -7,6 +7,7 @@
   .show-box
   .conn
     table.pure-table
+  .log-box
 </template>
 
 <script>
@@ -17,7 +18,8 @@
         allNumber: 100000000,
         like: [],
         data: {},
-        buyInfo: {}
+        buyInfo: {},
+        log: ''
       }
     },
     created: function () {
@@ -151,8 +153,13 @@
       this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2]
       console.log(this.data.userInfo.data[key][2], this.data.userInfo.buyInfo[key].num)
       this.data.userInfo.allNumber += (this.data.userInfo.data[key][2] * this.data.userInfo.buyInfo[key].num)
+      let inNum = this.data.userInfo.buyInfo[key].in
+      let outNum = this.data.userInfo.buyInfo[key].out
+      let yingkui = ((outNum - inNum) / inNum)) * 100
+      this.data.userInfo.log += `${this.data.userInfo.data[key][1]} 买入价格 ${inNum} 卖出价格 ${outNum} 盈利比 ${yingkui.toFixed(2)}%`
       this.data.userInfo.buyInfo[key].num = 0
       this.data.userInfo.buyInfo[key].in = 0
+      
       saveUserInfo(this.data.userInfo)
     }
   }

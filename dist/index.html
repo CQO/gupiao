@@ -235,7 +235,8 @@ owo.script = {
         "allNumber": 100000000,
         "like": [],
         "data": {},
-        "buyInfo": {}
+        "buyInfo": {},
+        "log": ""
       }
     },
     "created": function created() {
@@ -392,6 +393,10 @@ owo.script = {
       this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2];
       console.log(this.data.userInfo.data[key][2], this.data.userInfo.buyInfo[key].num);
       this.data.userInfo.allNumber += this.data.userInfo.data[key][2] * this.data.userInfo.buyInfo[key].num;
+      var inNum = this.data.userInfo.buyInfo[key]["in"];
+      var outNum = this.data.userInfo.buyInfo[key].out;
+      var yingkui = (outNum - inNum) / inNum;
+      this.data.userInfo.log += this.data.userInfo.data[key][1] + " \u4E70\u5165\u4EF7\u683C " + inNum + " \u5356\u51FA\u4EF7\u683C " + outNum + " \u76C8\u5229 " + yingkui.toFixed(2);
       this.data.userInfo.buyInfo[key].num = 0;
       this.data.userInfo.buyInfo[key]["in"] = 0;
       saveUserInfo(this.data.userInfo);
