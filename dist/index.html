@@ -30,7 +30,7 @@
     <!-- 页面[login]-->
     <div class="login page" template="login" style="display: none;"><div class="router" view="loginContent"><div class="view-login" route="login"><div class="image-box"><img src="https://cunchu.site/puge/login/image-box.png"></div><div class="hellow-text">嗨，欢迎回来!</div><div class="user-name-bar input-bar"><img class="bar-icon" src="https://cunchu.site/puge/login/user.png"><input type="text" o-value="this.data.username" placeholder="用户名"></div><div class="pass-word-bar input-bar"><img class="bar-icon" src="https://cunchu.site/puge/login/password.png"><input type="password" o-value="this.data.registerPassWord" placeholder="密码"></div><div class="button-box"><div class="button" o-tap="login" o-hover="radial-out">登录</div><div class="button" o-hover="radial-out" style=" background-color: burlywood;" go="/view-loginContent=register">注册</div></div><div class="tool-bar"><div class="left"></div><div class="right" go-route="">忘记密码</div></div></div><div class="view-register" route="register"><img class="bg-1" src="https://cunchu.site/puge/login/art.png"><p>欢迎注册PUGE账号</p><input class="register-input" type="text" o-value="this.data.registerusername" placeholder="用户名"><input class="register-input" type="password" o-value="this.data.registerPassWord" placeholder="密码"><input class="register-input" type="password" o-value="this.data.registerPassWordR" placeholder="确认密码"><div class="mini-box clear"><input class="register-input" type="text" o-value="this.data.registerPhone" placeholder="手机号码"><div class="button" o-tap="sendSMS">发送验证码</div></div><input class="register-input" type="text" o-value="this.data.registerCode" placeholder="验证码"><div class="button" o-tap="register">注册</div></div></div></div>
     <!-- 页面[page]-->
-    <div class="home page" template="page" style="display: none;"><div class="search-bar"><input type="text" o-value="this.data.searchText" placeholder="股票代码"><div class="button" o-tap="add">添加</div></div><div class="show-box"></div><div class="conn"><table></table></div></div>
+    <div class="home page" template="page" style="display: none;"><div class="search-bar"><div class="my-code"> </div><input type="text" o-value="this.data.searchText" placeholder="股票代码"><div class="button" o-tap="add">添加</div></div><div class="show-box"></div><div class="conn"><table class="pure-table"></table></div></div>
     
 <!-- 框架script文件 -->
 <script src="./static/js/owo.core.js" type="text/javascript" charset="UTF-8"></script>
@@ -232,11 +232,15 @@ owo.script = {
     "data": {
       "searchText": "sh600017",
       "userInfo": {
+        "allNumber": 100000000,
         "like": [],
-        "data": {}
+        "data": {},
+        "buyInfo": {}
       }
     },
     "created": function created() {
+      var _this = this;
+
       owo.event.login = function (userData) {
         owo.script.page.data.userInfo = JSON.parse(userData.data);
         owo.script.page.creatTable();
@@ -244,24 +248,46 @@ owo.script = {
       };
 
       owo.script.page.creatTable();
+      setTimeout(function () {
+        _this.updata();
+      }, 1000);
     },
     "creatTable": function creatTable() {
-      var _this = this;
+      var _this2 = this;
 
-      var newHtml = "<tr><th>\u80A1\u7968\u4EE3\u7801</th><th>\u80A1\u7968\u540D\u79F0</th><th>\u5F53\u524D\u4EF7\u683C</th><th>\u4E70\u5165\u4EF7\u683C</th><th>\u5356\u51FA\u4EF7\u683C</th><th>\u5E94\u7528\u89C4\u5219</th><th>\u5176\u4ED6\u64CD\u4F5C</th></tr>";
+      if (!this.data.userInfo.buyInfo) {
+        this.data.userInfo.buyInfo = {};
+      }
+
+      if (this.data.userInfo.like.length == 0) {
+        return;
+      }
+
+      this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber + '元';
+      var newHtml = "<tr><th>\u80A1\u7968\u4EE3\u7801</th><th>\u80A1\u7968\u540D\u79F0</th><th>\u5F53\u524D\u4EF7\u683C</th><th>\u5F00\u76D8\u4EF7\u683C</th><th>\u6DA8\u8DCC</th><th>\u6DA8\u8DCC%</th><th>\u632F\u5E45%</th><th>\u6301\u6709\u6570\u91CF</th><th>\u4E70\u5165\u4EF7\u683C</th><th>\u5356\u51FA\u4EF7\u683C</th><th>\u7D2F\u8BA1\u76C8\u4E8F</th><th>\u5E94\u7528\u89C4\u5219</th><th>\u5176\u4ED6\u64CD\u4F5C</th></tr>";
       var gupiaoData = this.data.userInfo.data;
       this.data.userInfo.like.forEach(function (element) {
         var item = gupiaoData[element];
-        newHtml += "<tr><td>" + element + "</td><td>" + item[0] + "</td><td>" + item[2] + "</td><td></td><td></td><td></td><td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span></td></tr>";
-      });
-      console.log(this);
+        var buyInfo = _this2.data.userInfo.buyInfo[element];
+
+        if (!buyInfo) {
+          buyInfo = {
+            num: 0,
+            "in": 0,
+            out: 0
+          };
+        }
+
+        newHtml += "<tr><td>" + element + "</td><td>" + item[0] + "</td><td>" + item[2] + "</td><td>" + item[3] + "</td><td>" + item[30] + "</td><td>" + item[31] + "%</td><td>" + item[41] + "%</td><td>" + buyInfo.num.toFixed(2) + "</td><td>" + buyInfo["in"] + "</td><td>" + buyInfo.out + "</td><td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td><td></td><td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span><span o-tap=\"jiacang('" + element + "')\">\u52A0\u4ED3</span><span o-tap=\"qingcang('" + element + "')\">\u6E05\u4ED3</span></td></tr>";
+      }); // console.log(this)
+
       this.query('table').innerHTML = newHtml;
       setTimeout(function () {
-        _this.handleEvent(_this, _this.query('tbody'));
+        _this2.handleEvent(_this2, _this2.query('tbody'));
       }, 100);
     },
     "add": function add() {
-      var _this2 = this;
+      var _this3 = this;
 
       var requestOptions = {
         method: 'POST',
@@ -271,28 +297,26 @@ owo.script = {
       fetch("https://going.run/gupiao?route=query", requestOptions).then(function (response) {
         return response.json();
       }).then(function (result) {
-        console.log(result);
-
+        // console.log(result)
         if (result.err == 0) {
           if (result.num > 0) {
             for (var key in result.data) {
               if (result.data.hasOwnProperty.call(result.data, key)) {
                 var element = result.data[key];
 
-                _this2.data.userInfo.like.push(key);
+                _this3.data.userInfo.like.push('sh' + key);
 
-                _this2.data.userInfo.data[key] = element;
+                _this3.data.userInfo.data['sh' + key] = element;
               }
             }
+
+            _this3.creatTable();
+
+            saveUserInfo(_this3.data.userInfo);
           } else {
             alert('股票代码错误!');
           }
         }
-
-        _this2.creatTable();
-
-        console.log(_this2.data.userInfo);
-        saveUserInfo(_this2.data.userInfo);
       })["catch"](function (error) {
         return console.log('error', error);
       });
@@ -307,6 +331,69 @@ owo.script = {
       this.data.userInfo.like = [];
       this.data.userInfo.data[key] = [];
       owo.script.page.creatTable();
+      saveUserInfo(this.data.userInfo);
+    },
+    "updata": function updata() {
+      var _this4 = this;
+
+      if (this.data.userInfo.like.lenghth == 0) {
+        setTimeout(function () {
+          _this4.updata();
+        }, 1000);
+        return;
+      }
+
+      var requestOptions = {
+        method: 'POST',
+        body: JSON.stringify(this.data.userInfo.like),
+        redirect: 'follow'
+      };
+      fetch("https://going.run/gupiao?route=query", requestOptions).then(function (response) {
+        return response.json();
+      }).then(function (result) {
+        _this4.data.userInfo.like = []; // console.log(result)
+
+        for (var key in result.data) {
+          if (result.data.hasOwnProperty.call(result.data, key)) {
+            var element = result.data[key];
+
+            _this4.data.userInfo.like.push('sh' + key);
+
+            _this4.data.userInfo.data['sh' + key] = element;
+          }
+        }
+
+        _this4.creatTable();
+
+        setTimeout(function () {
+          _this4.updata();
+        }, 1000);
+      })["catch"](function (error) {
+        return console.log('error', error);
+      });
+    },
+    "jiacang": function jiacang(key) {
+      console.log(key);
+
+      if (!this.data.userInfo.buyInfo[key]) {
+        this.data.userInfo.buyInfo[key] = {
+          num: 0,
+          "in": 0,
+          out: 0
+        };
+      }
+
+      this.data.userInfo.allNumber -= 5000;
+      this.data.userInfo.buyInfo[key].num += 5000 / this.data.userInfo.data[key][2];
+      this.data.userInfo.buyInfo[key]["in"] = this.data.userInfo.data[key][2];
+      saveUserInfo(this.data.userInfo);
+    },
+    "qingcang": function qingcang(key) {
+      this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2];
+      console.log(this.data.userInfo.data[key][2], this.data.userInfo.buyInfo[key].num);
+      this.data.userInfo.allNumber += this.data.userInfo.data[key][2] * this.data.userInfo.buyInfo[key].num;
+      this.data.userInfo.buyInfo[key].num = 0;
+      this.data.userInfo.buyInfo[key]["in"] = 0;
       saveUserInfo(this.data.userInfo);
     }
   }

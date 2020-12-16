@@ -1,11 +1,12 @@
 <template lang="pug">
 .home
   .search-bar
+    .my-code 
     input(type="text" o-value="this.data.searchText" placeholder="股票代码")
     .button(o-tap="add") 添加
   .show-box
   .conn
-    table
+    table.pure-table
 </template>
 
 <script>
@@ -13,8 +14,10 @@
     data: {
       searchText: 'sh600017',
       userInfo: {
+        allNumber: 100000000,
         like: [],
-        data: {}
+        data: {},
+        buyInfo: {}
       }
     },
     created: function () {
@@ -24,15 +27,33 @@
         console.log(userData)
       }
       owo.script.page.creatTable()
+      setTimeout(() => {
+        this.updata()
+      }, 1000);
     },
     creatTable: function () {
-      let newHtml = `<tr><th>股票代码</th><th>股票名称</th><th>当前价格</th><th>买入价格</th><th>卖出价格</th><th>应用规则</th><th>其他操作</th></tr>`
+      if (!this.data.userInfo.buyInfo) {
+        this.data.userInfo.buyInfo = {}
+      }
+      if (this.data.userInfo.like.length == 0) {
+        return
+      }
+      this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber + '元'
+      let newHtml = `<tr><th>股票代码</th><th>股票名称</th><th>当前价格</th><th>开盘价格</th><th>涨跌</th><th>涨跌%</th><th>振幅%</th><th>持有数量</th><th>买入价格</th><th>卖出价格</th><th>累计盈亏</th><th>应用规则</th><th>其他操作</th></tr>`
       const gupiaoData = this.data.userInfo.data
       this.data.userInfo.like.forEach(element => {
         const item = gupiaoData[element]
-        newHtml += `<tr><td>${element}</td><td>${item[0]}</td><td>${item[2]}</td><td></td><td></td><td></td><td><span o-tap="delateKey('${element}')">删除</span></td></tr>`
+        let buyInfo = this.data.userInfo.buyInfo[element]
+        if (!buyInfo) {
+          buyInfo = {
+            num: 0,
+            in: 0,
+            out: 0
+          }
+        }
+        newHtml += `<tr><td>${element}</td><td>${item[0]}</td><td>${item[2]}</td><td>${item[3]}</td><td>${item[30]}</td><td>${item[31]}%</td><td>${item[41]}%</td><td>${buyInfo.num.toFixed(2)}</td><td>${buyInfo.in}</td><td>${buyInfo.out}</td><td>${((item[2] - buyInfo.in) * buyInfo.num).toFixed(2)}元</td><td></td><td><span o-tap="delateKey('${element}')">删除</span><span o-tap="jiacang('${element}')">加仓</span><span o-tap="qingcang('${element}')">清仓</span></td></tr>`
       })
-      console.log(this)
+      // console.log(this)
       this.query('table').innerHTML = newHtml
       setTimeout(() => {
         this.handleEvent(this, this.query('tbody'))
@@ -47,23 +68,22 @@
       fetch("https://going.run/gupiao?route=query", requestOptions)
         .then(response => response.json())
         .then((result) => {
-          console.log(result)
+          // console.log(result)
           if (result.err == 0) {
             if (result.num > 0) {
               for (const key in result.data) {
                 if (result.data.hasOwnProperty.call(result.data, key)) {
                   const element = result.data[key];
-                  this.data.userInfo.like.push(key)
-                  this.data.userInfo.data[key] = element
+                  this.data.userInfo.like.push('sh' + key)
+                  this.data.userInfo.data['sh' + key] = element
                 }
               }
+              this.creatTable()
+              saveUserInfo(this.data.userInfo)
             } else {
               alert('股票代码错误!')
             }
           }
-          this.creatTable()
-          console.log(this.data.userInfo)
-          saveUserInfo(this.data.userInfo)
         })
         .catch(error => console.log('error', error));
     },
@@ -77,6 +97,62 @@
       this.data.userInfo.like = []
       this.data.userInfo.data[key] = []
       owo.script.page.creatTable()
+      saveUserInfo(this.data.userInfo)
+    },
+    updata: function () {
+      if (this.data.userInfo.like.lenghth == 0) {
+        setTimeout(() => {
+          this.updata()
+        }, 1000);
+        return
+      }
+      
+      
+      var requestOptions = {
+        method: 'POST',
+        body: JSON.stringify(this.data.userInfo.like),
+        redirect: 'follow'
+      };
+      fetch("https://going.run/gupiao?route=query", requestOptions)
+        .then(response => response.json())
+        .then((result) => {
+          this.data.userInfo.like = []
+          // console.log(result)
+          for (const key in result.data) {
+            if (result.data.hasOwnProperty.call(result.data, key)) {
+              const element = result.data[key];
+              this.data.userInfo.like.push('sh' + key)
+              this.data.userInfo.data['sh' + key] = element
+            }
+          }
+          this.creatTable()
+          setTimeout(() => {
+            this.updata()
+          }, 1000);
+        })
+        .catch(error => console.log('error', error));
+    },
+    jiacang: function (key) {
+      console.log(key)
+      if (!this.data.userInfo.buyInfo[key]) {
+        this.data.userInfo.buyInfo[key] = {
+          num: 0,
+          in: 0,
+          out: 0
+        }
+      }
+      this.data.userInfo.allNumber -= 5000
+      this.data.userInfo.buyInfo[key].num += (5000 / this.data.userInfo.data[key][2])
+      this.data.userInfo.buyInfo[key].in = this.data.userInfo.data[key][2]
+      saveUserInfo(this.data.userInfo)
+    },
+    qingcang: function (key) {
+      
+      this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2]
+      console.log(this.data.userInfo.data[key][2], this.data.userInfo.buyInfo[key].num)
+      this.data.userInfo.allNumber += (this.data.userInfo.data[key][2] * this.data.userInfo.buyInfo[key].num)
+      this.data.userInfo.buyInfo[key].num = 0
+      this.data.userInfo.buyInfo[key].in = 0
       saveUserInfo(this.data.userInfo)
     }
   }
@@ -105,5 +181,16 @@
   margin: 0 10px;
   border-radius: 3px;
   cursor: pointer;
+}
+td {
+  span {
+    color: #009fe9;
+    cursor: pointer;
+    margin: 0 2px;
+  }
+}
+.my-code {
+  position: absolute;
+  left: 0;
 }
 </style>
