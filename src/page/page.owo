@@ -7,6 +7,10 @@
   .show-box
   .conn
     table.pure-table
+  .tool-box
+    .button(o-tap="addAll") 全部加仓
+    .button(o-tap="clearAll") 全部清仓
+    .button(o-tap="clear10") 全部减仓10%
   .log-box
 </template>
 
@@ -57,6 +61,7 @@
       })
       // console.log(this)
       this.query('table').innerHTML = newHtml
+      this.query('.log-box').innerHTML = this.data.userInfo.log
       setTimeout(() => {
         this.handleEvent(this, this.query('tbody'))
       }, 100);
@@ -144,23 +149,52 @@
         }
       }
       this.data.userInfo.allNumber -= 5000
-      this.data.userInfo.buyInfo[key].num += (5000 / this.data.userInfo.data[key][2])
-      this.data.userInfo.buyInfo[key].in = this.data.userInfo.data[key][2]
+      let nowP = this.data.userInfo.data[key][2]
+      if (this.data.userInfo.buyInfo[key].num == 0) {
+        this.data.userInfo.buyInfo[key].in = nowP
+      } else {
+        this.data.userInfo.buyInfo[key].in = ((nowP * 5000) + (this.data.userInfo.buyInfo[key].in * this.data.userInfo.buyInfo[key].num)) / (5000 + this.data.userInfo.buyInfo[key].num)
+      }
+      this.data.userInfo.buyInfo[key].num += (5000 / nowP)
+      
       saveUserInfo(this.data.userInfo)
     },
-    qingcang: function (key) {
+    qingcang: function (key, clearNumber) {
       
+      if (!this.data.userInfo.buyInfo[key] || this.data.userInfo.buyInfo[key].num == 0) {
+        return
+      }
+      let userBuyNum = this.data.userInfo.buyInfo[key].num
+      clearNumber = clearNumber || userBuyNum
       this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2]
-      console.log(this.data.userInfo.data[key][2], this.data.userInfo.buyInfo[key].num)
-      this.data.userInfo.allNumber += (this.data.userInfo.data[key][2] * this.data.userInfo.buyInfo[key].num)
+      console.log(this.data.userInfo.data[key][2], userBuyNum)
+      this.data.userInfo.allNumber += (this.data.userInfo.data[key][2] * clearNumber)
       let inNum = this.data.userInfo.buyInfo[key].in
       let outNum = this.data.userInfo.buyInfo[key].out
-      let yingkui = ((outNum - inNum) / inNum)) * 100
-      this.data.userInfo.log += `${this.data.userInfo.data[key][1]} 买入价格 ${inNum} 卖出价格 ${outNum} 盈利比 ${yingkui.toFixed(2)}%`
-      this.data.userInfo.buyInfo[key].num = 0
-      this.data.userInfo.buyInfo[key].in = 0
+      let yingkui = (outNum - inNum) * clearNumber
+      this.data.userInfo.log += `${this.data.userInfo.data[key][0]} 买入价格 ${inNum} 卖出价格 ${outNum} 盈利 ${yingkui.toFixed(2)}元;<br>`
+      this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - clearNumber
       
       saveUserInfo(this.data.userInfo)
+    },
+    addAll: function () {
+      console.log('全部加仓!')
+      this.data.userInfo.like.forEach(element => {
+        this.jiacang(element)
+      });
+    },
+    clearAll: function () {
+      console.log('全部清仓!')
+      this.data.userInfo.like.forEach(element => {
+        this.qingcang(element)
+      });
+    },
+    clear10: function () {
+      console.log('全部减仓10%!')
+      this.data.userInfo.like.forEach(element => {
+        const clearNumber = this.data.userInfo.buyInfo[element].num * 0.1
+        this.qingcang(element, clearNumber)
+      });
     }
   }
 </script>
@@ -199,5 +233,23 @@ td {
 .my-code {
   position: absolute;
   left: 0;
+}
+.conn {
+  height: calc(100% - 340px);
+}
+.log-box {
+  height: 243px;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  overflow: auto;
+}
+.tool-box {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  border-top: 1px solid #ccc;
+}
+table {
+  width: 100%;
 }
 </style>
