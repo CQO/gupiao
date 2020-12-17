@@ -1,0 +1,114 @@
+body, html, .page, .page-box {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.owo-animation {
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.owo-animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+.owo-animation-forward {
+  z-index: 99;
+}
+
+img {
+  border: none;
+}
+
+[route-active="false"] {
+  display: none;
+}
+
+/* 清除浮动 */
+.clear:after {
+  content: "";
+  height: 0;
+  line-height: 0;
+  display: block;
+  visibility: hidden;
+  clear: both;
+  zoom: 1;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.search-bar {
+  display: flex;
+  height: 35px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px;
+  background-color: ghostwhite;
+}
+
+.search-bar input {
+  height: 25px;
+  padding: 0 5px;
+}
+
+.button {
+  display: block;
+  line-height: 28px;
+  background-color: #009fe9;
+  color: white;
+  padding: 0 10px;
+  margin: 0 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+td span {
+  color: #009fe9;
+  cursor: pointer;
+  margin: 0 2px;
+}
+
+.my-code {
+  position: absolute;
+  left: 0;
+}
+
+.conn {
+  height: calc(100% - 340px);
+}
+
+.log-box {
+  height: 243px;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  overflow: auto;
+}
+
+.tool-box {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  border-top: 1px solid #ccc;
+}
+
+table {
+  width: 100%;
+}
+

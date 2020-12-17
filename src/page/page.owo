@@ -15,6 +15,7 @@
 </template>
 
 <script>
+  var appType = 'gupiao'
   module.exports = {
     data: {
       searchText: 'sh600017',
@@ -27,12 +28,34 @@
       }
     },
     created: function () {
-      owo.event.login = function (userData) {
-        owo.script.page.data.userInfo = JSON.parse(userData.data)
-        owo.script.page.creatTable()
-        console.log(userData)
-      }
-      owo.script.page.creatTable()
+      fetch(`http://going.run/userServer?route=loginSession`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          type: 'gupiao',
+          username: 'test',
+          session: 'mEvdZ4n4rWfHsROk'
+        })
+      }).then((response) => {return response.json();}).then((res) => {
+        console.log(res)
+        if (res.err === 0) {
+          owo.tool.toast('登陆成功')
+          owo.state.userInfo = res.data
+          localStorage.setItem('owoUserInfo_' + appType, JSON.stringify(res.data))
+          console.log(owo.state.userInfo)
+          owo.script.page.data.userInfo = JSON.parse(owo.state.userInfo.data)
+          setTimeout(() => {
+            owo.script.page.creatTable()
+          }, 0);
+          
+          
+        } else {
+          owo.go('login')
+          owo.tool.toast(res.message)
+        }
+      })
       setTimeout(() => {
         this.updata()
       }, 1000);
@@ -41,7 +64,7 @@
       if (!this.data.userInfo.buyInfo) {
         this.data.userInfo.buyInfo = {}
       }
-      if (this.data.userInfo.like.length == 0) {
+      if (!this.data.userInfo.like || this.data.userInfo.like.length == 0) {
         return
       }
       this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber + '元'
@@ -107,7 +130,7 @@
       saveUserInfo(this.data.userInfo)
     },
     updata: function () {
-      if (this.data.userInfo.like.lenghth == 0) {
+      if (!this.data.userInfo.like || this.data.userInfo.like.lenghth == 0) {
         setTimeout(() => {
           this.updata()
         }, 1000);
