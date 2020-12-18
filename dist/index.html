@@ -28,7 +28,7 @@
   <body>
     
     <!-- 页面[page]-->
-    <div class="home page" template="page" style="display: block;"><div class="search-bar"><div class="my-code"> </div><input type="text" o-value="this.data.searchText" placeholder="股票代码"><div class="button" o-tap="add">添加</div></div><div class="show-box"></div><div class="conn"><table class="pure-table"></table></div><div class="tool-box"><div class="button" o-tap="addAll">全部加仓</div><div class="button" o-tap="clearAll">全部清仓</div><div class="button" o-tap="clear10">全部减仓10%</div></div><div class="log-box"></div></div>
+    <div class="home page" template="page" style="display: block;"><div class="search-bar"><div class="my-code"> </div><input type="text" o-value="this.data.searchText" placeholder="股票代码"><div class="button" o-tap="add">添加</div></div><div class="show-box"></div><div class="conn"><table class="pure-table"></table></div><div class="tool-box"><div class="button" o-tap="addAll">全部加仓</div><div class="button" o-tap="clearAll">全部清仓</div><div class="button" o-tap="clear10">全部减仓10%</div><div class="button" o-tap="clearLog">清理日志</div></div><div class="log-box"></div></div>
     
 <!-- 框架script文件 -->
 <script src="./static/js/owo.core.js" type="text/javascript" charset="UTF-8"></script>
@@ -69,8 +69,8 @@ owo.script = {
           owo.tool.toast('登陆成功');
           owo.state.userInfo = res.data;
           localStorage.setItem('owoUserInfo_' + appType, JSON.stringify(res.data));
-          console.log(owo.state.userInfo);
           owo.script.page.data.userInfo = JSON.parse(owo.state.userInfo.data);
+          console.log(owo.script.page.data.userInfo);
           setTimeout(function () {
             owo.script.page.creatTable();
           }, 0);
@@ -95,9 +95,11 @@ owo.script = {
       }
 
       this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber + '元';
-      var newHtml = "<tr><th>\u80A1\u7968\u4EE3\u7801</th><th>\u80A1\u7968\u540D\u79F0</th><th>\u5F53\u524D\u4EF7\u683C</th><th>\u5F00\u76D8\u4EF7\u683C</th><th>\u6DA8\u8DCC</th><th>\u6DA8\u8DCC%</th><th>\u632F\u5E45%</th><th>\u6301\u6709\u6570\u91CF</th><th>\u4E70\u5165\u4EF7\u683C</th><th>\u5356\u51FA\u4EF7\u683C</th><th>\u7D2F\u8BA1\u76C8\u4E8F</th><th>\u5E94\u7528\u89C4\u5219</th><th>\u5176\u4ED6\u64CD\u4F5C</th></tr>";
+      var newHtml = "<tr>\n      <th>\u7F16\u53F7</th>\n      <th>\u80A1\u7968\u4EE3\u7801</th>\n      <th>\u4F4E\u5438%</th>\n      <th>\u9AD8\u629B%</th>\n      <th>\u5F53\u524D\u4EF7\u683C</th>\n      <th>\u5F00\u76D8\u4EF7\u683C</th>\n      <th>\u6DA8\u8DCC</th>\n      <th>\u6DA8\u8DCC%</th>\n      <th>\u632F\u5E45%</th>\n      <th>\u6301\u6709\u6570\u91CF</th>\n      <th>\u4E70\u5165\u4EF7\u683C</th>\n      <th>\u5356\u51FA\u4EF7\u683C</th>\n      <th>\u7D2F\u8BA1\u76C8\u4E8F</th>\n      <th>\u4E0B\u6B21\u4E70\u5165\u4EF7</th>\n      <th>\u4E0B\u6B21\u5356\u51FA</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
       var gupiaoData = this.data.userInfo.data;
+      var ind = 0;
       this.data.userInfo.like.forEach(function (element) {
+        ind++;
         var item = gupiaoData[element];
         var buyInfo = _this2.data.userInfo.buyInfo[element];
 
@@ -109,7 +111,9 @@ owo.script = {
           };
         }
 
-        newHtml += "<tr><td>" + element + "</td><td>" + item[0] + "</td><td>" + item[2] + "</td><td>" + item[3] + "</td><td>" + item[30] + "</td><td>" + item[31] + "%</td><td>" + item[41] + "%</td><td>" + buyInfo.num.toFixed(2) + "</td><td>" + buyInfo["in"] + "</td><td>" + buyInfo.out + "</td><td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td><td></td><td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span><span o-tap=\"jiacang('" + element + "')\">\u52A0\u4ED3</span><span o-tap=\"qingcang('" + element + "')\">\u6E05\u4ED3</span></td></tr>";
+        buyInfo.setNum = buyInfo.setNum || 0;
+        buyInfo.setNum2 = buyInfo.setNum2 || 0;
+        newHtml += "<tr>\n          <td>" + ind + "</td>\n          <td>" + element + "</td>\n          <td><input type=\"number\" o-input=\"changeM(" + item[1] + ")\" value=\"" + buyInfo.setNum + "\"></td>\n          <td><input type=\"number\" o-input=\"changeM2(" + item[1] + ")\" value=\"" + buyInfo.setNum2 + "\"></td>\n          <td>" + item[2] + "</td>\n          <td>" + item[3] + "</td>\n          <td>" + item[30] + "</td>\n          <td>" + item[31] + "%</td>\n          <td>" + item[41] + "%</td>\n          <td>" + buyInfo.num.toFixed(2) + "</td>\n          <td>" + buyInfo["in"] + "</td>\n          <td>" + buyInfo.out + "</td>\n          <td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 - buyInfo.setNum) / 100).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 + buyInfo.setNum2) / 100).toFixed(2) + "\u5143</td>\n          <td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span><span o-tap=\"jiacang('" + element + "')\">\u52A0\u4ED3</span><span o-tap=\"qingcang('" + element + "')\">\u6E05\u4ED3</span></td>\n          </tr>";
       }); // console.log(this)
 
       this.query('table').innerHTML = newHtml;
@@ -153,6 +157,26 @@ owo.script = {
         return console.log('error', error);
       });
     },
+    "changeM": function changeM(id) {
+      var _this4 = this;
+
+      console.log(this.$target.value);
+      this.data.userInfo.buyInfo['sh' + id].setNum = 2;
+      saveUserInfo(this.data.userInfo);
+      setTimeout(function () {
+        _this4.creatTable();
+      }, 0);
+    },
+    "changeM2": function changeM2(id) {
+      var _this5 = this;
+
+      console.log(this.$target.value);
+      this.data.userInfo.buyInfo['sh' + id].setNum2 = 2;
+      saveUserInfo(this.data.userInfo);
+      setTimeout(function () {
+        _this5.creatTable();
+      }, 0);
+    },
     "delateKey": function delateKey(key) {
       var newList = [];
       this.data.userInfo.like.forEach(function (element) {
@@ -166,11 +190,11 @@ owo.script = {
       saveUserInfo(this.data.userInfo);
     },
     "updata": function updata() {
-      var _this4 = this;
+      var _this6 = this;
 
       if (!this.data.userInfo.like || this.data.userInfo.like.lenghth == 0) {
         setTimeout(function () {
-          _this4.updata();
+          _this6.updata();
         }, 1000);
         return;
       }
@@ -183,22 +207,22 @@ owo.script = {
       fetch("https://going.run/gupiao?route=query", requestOptions).then(function (response) {
         return response.json();
       }).then(function (result) {
-        _this4.data.userInfo.like = []; // console.log(result)
+        _this6.data.userInfo.like = []; // console.log(result)
 
         for (var key in result.data) {
           if (result.data.hasOwnProperty.call(result.data, key)) {
             var element = result.data[key];
 
-            _this4.data.userInfo.like.push('sh' + key);
+            _this6.data.userInfo.like.push('sh' + key);
 
-            _this4.data.userInfo.data['sh' + key] = element;
+            _this6.data.userInfo.data['sh' + key] = element;
           }
         }
 
-        _this4.creatTable();
+        _this6.creatTable();
 
         setTimeout(function () {
-          _this4.updata();
+          _this6.updata();
         }, 1000);
       })["catch"](function (error) {
         return console.log('error', error);
@@ -245,30 +269,37 @@ owo.script = {
       saveUserInfo(this.data.userInfo);
     },
     "addAll": function addAll() {
-      var _this5 = this;
+      var _this7 = this;
 
       console.log('全部加仓!');
       this.data.userInfo.like.forEach(function (element) {
-        _this5.jiacang(element);
+        _this7.jiacang(element);
       });
     },
     "clearAll": function clearAll() {
-      var _this6 = this;
+      var _this8 = this;
 
       console.log('全部清仓!');
       this.data.userInfo.like.forEach(function (element) {
-        _this6.qingcang(element);
+        _this8.qingcang(element);
       });
     },
     "clear10": function clear10() {
-      var _this7 = this;
+      var _this9 = this;
 
       console.log('全部减仓10%!');
       this.data.userInfo.like.forEach(function (element) {
-        var clearNumber = _this7.data.userInfo.buyInfo[element].num * 0.1;
+        var clearNumber = _this9.data.userInfo.buyInfo[element].num * 0.1;
 
-        _this7.qingcang(element, clearNumber);
+        _this9.qingcang(element, clearNumber);
       });
+    },
+    "clearLog": function clearLog() {
+      this.data.userInfo.log = '';
+      saveUserInfo(this.data.userInfo);
+      setTimeout(function () {
+        owo.script.page.creatTable();
+      }, 0);
     }
   }
 };
