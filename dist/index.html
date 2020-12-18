@@ -1,317 +1,343 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <!-- 页面的元信息 -->
-    <title>测试预览页面</title>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=1000, user-scalable=yes"/>
-    <meta name="format-detection" content="telephone=no, email=no"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="white"/>
-    <meta name="renderer" content="webkit"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="filetype" content="1"/>
-    <meta name="publishedtype" content="1"/>
-    <meta name="pagetype" content="2"/>
-    <meta name="description" content="{TAG_59447_TAG}"/>
-    <meta name="keywords" content="{TAG_59446_TAG}"/>
-    <meta name="catalogs" content="{TAG_83943_TAG}"/>
-    
-      <!-- 页面主样式文件 -->
-      <link charset="utf-8"  rel="stylesheet" href="./static/css/owo.core.css">
-      
-    <!-- 附属css文件 -->
-    <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
-    <link rel="stylesheet" href="https://cunchu.site/owo/style/idangerous.swiper2.7.6.css" charset="utf-8">
-      
-  </head>
-  <body>
-    
-    <!-- 页面[page]-->
-    <div class="home page" template="page" style="display: block;"><div class="search-bar"><div class="my-code"> </div><input type="text" o-value="this.data.searchText" placeholder="股票代码"><div class="button" o-tap="add">添加</div></div><div class="show-box"></div><div class="conn"><table class="pure-table"></table></div><div class="tool-box"><div class="button" o-tap="addAll">全部加仓</div><div class="button" o-tap="clearAll">全部清仓</div><div class="button" o-tap="clear10">全部减仓10%</div><div class="button" o-tap="clearLog">清理日志</div></div><div class="log-box"></div></div>
-    
-<!-- 框架script文件 -->
-<script src="./static/js/owo.core.js" type="text/javascript" charset="UTF-8"></script>
-<script type="text/javascript" charset="UTF-8">
-// 模块 page 的script代码
-var appType = 'gupiao';
-owo.script = {
-  "page": {
-    "data": {
-      "searchText": "sh600017",
-      "userInfo": {
-        "allNumber": 100000000,
-        "like": [],
-        "data": {},
-        "buyInfo": {},
-        "log": ""
-      }
-    },
-    "created": function created() {
-      var _this = this;
 
-      fetch("http://going.run/userServer?route=loginSession", {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json"
+<head>
+  <!-- 页面的元信息 -->
+  <title>{TAG_14226_TAG}</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=1000, user-scalable=yes" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+  <meta name="renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="filetype" content="1" />
+  <meta name="publishedtype" content="1" />
+  <meta name="pagetype" content="2" />
+  <meta name="description" content="{TAG_59447_TAG}" />
+  <meta name="keywords" content="{TAG_59446_TAG}" />
+  <meta name="catalogs" content="{TAG_83943_TAG}" />
+
+  <!-- 页面主样式文件 -->
+  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.5frfxyyvlmk.css">
+
+  <!-- 附属css文件 -->
+  <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
+  <link rel="stylesheet" href="./static/resource/idangerous.swiper2.7.6.css" charset="utf-8">
+
+</head>
+
+<body>
+
+  <!-- 页面[page]-->
+  <div class="home page" template="page" style="display: block;">
+    <div class="search-bar">
+      <div class="my-code"> </div>
+      <input type="text" o-value="this.data.searchText" placeholder="股票代码">
+      <div class="button" o-tap="add">添加</div>
+    </div>
+    <div class="show-box"></div>
+    <div class="conn">
+      <table class="pure-table"></table>
+    </div>
+    <div class="tool-box">
+      <div class="button" o-tap="addAll">全部加仓</div>
+      <div class="button" o-tap="clearAll">全部清仓</div>
+      <div class="button" o-tap="clear10">全部减仓10%</div>
+      <div class="button" o-tap="clearLog">清理日志</div>
+    </div>
+    <div class="log-box"></div>
+  </div>
+
+  <!-- 框架script文件 -->
+  <script src="./static/js/owo.core.5frfxyyvlmk.js" type="text/javascript" charset="UTF-8"></script>
+  <script type="text/javascript" charset="UTF-8">
+    // 模块 page 的script代码
+    var appType = 'gupiao';
+    owo.script = {
+      "page": {
+        "data": {
+          "searchText": "sh600017",
+          "userInfo": {
+            "allNumber": 100000000,
+            "like": [],
+            "data": {},
+            "buyInfo": {},
+            "log": ""
+          }
         },
-        body: JSON.stringify({
-          type: 'gupiao',
-          username: 'test',
-          session: 'mEvdZ4n4rWfHsROk'
-        })
-      }).then(function (response) {
-        return response.json();
-      }).then(function (res) {
-        console.log(res);
+        "created": function created() {
+          var _this = this;
 
-        if (res.err === 0) {
-          owo.tool.toast('登陆成功');
-          owo.state.userInfo = res.data;
-          localStorage.setItem('owoUserInfo_' + appType, JSON.stringify(res.data));
-          owo.script.page.data.userInfo = JSON.parse(owo.state.userInfo.data);
-          console.log(owo.script.page.data.userInfo);
-          setTimeout(function () {
-            owo.script.page.creatTable();
-          }, 0);
-        } else {
-          owo.go('login');
-          owo.tool.toast(res.message);
-        }
-      });
-      setTimeout(function () {
-        _this.updata();
-      }, 1000);
-    },
-    "creatTable": function creatTable() {
-      var _this2 = this;
+          fetch("http://going.run/userServer?route=loginSession", {
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              type: 'gupiao',
+              username: 'test',
+              session: 'mEvdZ4n4rWfHsROk'
+            })
+          }).then(function(response) {
+            return response.json();
+          }).then(function(res) {
+            console.log(res);
 
-      if (!this.data.userInfo.buyInfo) {
-        this.data.userInfo.buyInfo = {};
-      }
+            if (res.err === 0) {
+              owo.tool.toast('登陆成功');
+              owo.state.userInfo = res.data;
+              localStorage.setItem('owoUserInfo_' + appType, JSON.stringify(res.data));
+              owo.script.page.data.userInfo = JSON.parse(owo.state.userInfo.data);
+              console.log(owo.script.page.data.userInfo);
+              setTimeout(function() {
+                owo.script.page.creatTable();
+              }, 0);
+            } else {
+              owo.go('login');
+              owo.tool.toast(res.message);
+            }
+          });
+          setTimeout(function() {
+            _this.updata();
+          }, 1000);
+        },
+        "creatTable": function creatTable() {
+          var _this2 = this;
 
-      if (!this.data.userInfo.like || this.data.userInfo.like.length == 0) {
-        return;
-      }
+          if (!this.data.userInfo.buyInfo) {
+            this.data.userInfo.buyInfo = {};
+          }
 
-      this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber + '元';
-      var newHtml = "<tr>\n      <th>\u7F16\u53F7</th>\n      <th>\u80A1\u7968\u4EE3\u7801</th>\n      <th>\u5F53\u524D\u4EF7\u683C</th>\n      <th>\u4F4E\u5438%</th>\n      <th>\u9AD8\u629B%</th>\n      <th>\u632F\u5E45%</th>\n      <th>\u7D2F\u8BA1\u76C8\u4E8F</th>\n      <th>\u9884\u4E70\u4EF7</th>\n      <th>\u9884\u5356\u4EF7</th>\n      <th>\u4F4E\u5438\u6B21\u6570</th>\n      <th>\u9AD8\u629B\u6B21\u6570</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
-      var gupiaoData = this.data.userInfo.data;
-      var ind = 0;
-      this.data.userInfo.like.forEach(function (element) {
-        ind++;
-        var item = gupiaoData[element];
-        var buyInfo = _this2.data.userInfo.buyInfo[element];
+          if (!this.data.userInfo.like || this.data.userInfo.like.length == 0) {
+            return;
+          }
 
-        if (!buyInfo) {
-          buyInfo = {
-            num: 0,
-            "in": 0,
-            out: 0
+          this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber + '元';
+          var newHtml = "<tr>\n      <th>\u7F16\u53F7</th>\n      <th>\u80A1\u7968\u4EE3\u7801</th>\n      <th>\u5F53\u524D\u4EF7\u683C</th>\n      <th>\u4F4E\u5438%</th>\n      <th>\u9AD8\u629B%</th>\n      <th>\u632F\u5E45%</th>\n      <th>\u7D2F\u8BA1\u76C8\u4E8F</th>\n      <th>\u9884\u4E70\u4EF7</th>\n      <th>\u9884\u5356\u4EF7</th>\n      <th>\u4F4E\u5438\u6B21\u6570</th>\n      <th>\u9AD8\u629B\u6B21\u6570</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
+          var gupiaoData = this.data.userInfo.data;
+          var ind = 0;
+          this.data.userInfo.like.forEach(function(element) {
+            ind++;
+            var item = gupiaoData[element];
+            var buyInfo = _this2.data.userInfo.buyInfo[element];
+
+            if (!buyInfo) {
+              buyInfo = {
+                num: 0,
+                "in": 0,
+                out: 0
+              };
+            }
+
+            console.log(_this2.data.userInfo);
+            buyInfo.setNum = buyInfo.setNum || 0;
+            buyInfo.setNum2 = buyInfo.setNum2 || 0;
+            buyInfo.setNumTime = buyInfo.setNumTime || 0;
+            buyInfo.setNum2Time = buyInfo.setNum2Time || 0;
+            newHtml += "<tr>\n          <td>" + ind + "</td>\n          <td>" + element + "</td>\n          <td>" + item[2] + "</td>\n          <td><input type=\"number\" o-input=\"changeM(" + item[1] + ")\" value=\"" + buyInfo.setNum + "\"></td>\n          <td><input type=\"number\" o-input=\"changeM2(" + item[1] + ")\" value=\"" + buyInfo.setNum2 + "\"></td>\n          <td>" + item[41] + "%</td>\n          <td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 - buyInfo.setNum) / 100).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 + buyInfo.setNum2) / 100).toFixed(2) + "\u5143</td>\n          <td>" + buyInfo.setNumTime + "</td>\n          <td>" + buyInfo.setNum2Time + "</td>\n          <td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span></td>\n          </tr>";
+          }); // console.log(this)
+
+          this.query('table').innerHTML = newHtml;
+          this.query('.log-box').innerHTML = this.data.userInfo.log;
+          setTimeout(function() {
+            _this2.handleEvent(_this2, _this2.query('tbody'));
+          }, 100);
+        },
+        "add": function add() {
+          var _this3 = this;
+
+          var requestOptions = {
+            method: 'POST',
+            body: JSON.stringify([this.data.searchText]),
+            redirect: 'follow'
           };
-        }
+          fetch("https://going.run/gupiao?route=query", requestOptions).then(function(response) {
+            return response.json();
+          }).then(function(result) {
+            // console.log(result)
+            if (result.err == 0) {
+              if (result.num > 0) {
+                for (var key in result.data) {
+                  if (result.data.hasOwnProperty.call(result.data, key)) {
+                    var element = result.data[key];
 
-        buyInfo.setNum = buyInfo.setNum || 0;
-        buyInfo.setNum2 = buyInfo.setNum2 || 0;
-        buyInfo.setNumTime = buyInfo.setNumTime || 0;
-        buyInfo.setNum2Time = buyInfo.setNum2Time || 0;
-        newHtml += "<tr>\n          <td>" + ind + "</td>\n          <td>" + element + "</td>\n          <td>" + item[2] + "</td>\n          <td><input type=\"number\" o-input=\"changeM(" + item[1] + ")\" value=\"" + buyInfo.setNum + "\"></td>\n          <td><input type=\"number\" o-input=\"changeM2(" + item[1] + ")\" value=\"" + buyInfo.setNum2 + "\"></td>\n          <td>" + item[41] + "%</td>\n          <td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 - buyInfo.setNum) / 100).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 + buyInfo.setNum2) / 100).toFixed(2) + "\u5143</td>\n          <td>" + buyInfo.setNumTime + "</td>\n          <td>" + buyInfo.setNum2Time + "</td>\n          <td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span></td>\n          </tr>";
-      }); // console.log(this)
+                    _this3.data.userInfo.like.push('sh' + key);
 
-      this.query('table').innerHTML = newHtml;
-      this.query('.log-box').innerHTML = this.data.userInfo.log;
-      setTimeout(function () {
-        _this2.handleEvent(_this2, _this2.query('tbody'));
-      }, 100);
-    },
-    "add": function add() {
-      var _this3 = this;
+                    _this3.data.userInfo.data['sh' + key] = element;
 
-      var requestOptions = {
-        method: 'POST',
-        body: JSON.stringify([this.data.searchText]),
-        redirect: 'follow'
-      };
-      fetch("https://going.run/gupiao?route=query", requestOptions).then(function (response) {
-        return response.json();
-      }).then(function (result) {
-        // console.log(result)
-        if (result.err == 0) {
-          if (result.num > 0) {
+                    _this3.jiacang('sh' + key);
+                  }
+                }
+
+                _this3.creatTable();
+
+                saveUserInfo(_this3.data.userInfo);
+              } else {
+                alert('股票代码错误!');
+              }
+            }
+          })["catch"](function(error) {
+            return console.log('error', error);
+          });
+        },
+        "changeM": function changeM(id) {
+          var _this4 = this;
+
+          console.log(this.$target.value);
+          this.data.userInfo.buyInfo['sh' + id].setNum = 2;
+          saveUserInfo(this.data.userInfo);
+          setTimeout(function() {
+            _this4.creatTable();
+          }, 0);
+        },
+        "changeM2": function changeM2(id) {
+          var _this5 = this;
+
+          console.log(this.$target.value);
+          this.data.userInfo.buyInfo['sh' + id].setNum2 = 2;
+          saveUserInfo(this.data.userInfo);
+          setTimeout(function() {
+            _this5.creatTable();
+          }, 0);
+        },
+        "delateKey": function delateKey(key) {
+          var _this6 = this;
+
+          var newList = [];
+          this.data.userInfo.like.forEach(function(element) {
+            if (element !== key) {
+              newList.push(key);
+            }
+          });
+          this.data.userInfo.like = newList;
+          this.data.userInfo.data[key] = [];
+          saveUserInfo(this.data.userInfo);
+          setTimeout(function() {
+            _this6.creatTable();
+          }, 100);
+        },
+        "updata": function updata() {
+          var _this7 = this;
+
+          if (!this.data.userInfo.like || this.data.userInfo.like.lenghth == 0) {
+            setTimeout(function() {
+              _this7.updata();
+            }, 1000);
+            return;
+          }
+
+          var requestOptions = {
+            method: 'POST',
+            body: JSON.stringify(this.data.userInfo.like),
+            redirect: 'follow'
+          };
+          fetch("https://going.run/gupiao?route=query", requestOptions).then(function(response) {
+            return response.json();
+          }).then(function(result) {
+            _this7.data.userInfo.like = []; // console.log(result)
+
             for (var key in result.data) {
               if (result.data.hasOwnProperty.call(result.data, key)) {
                 var element = result.data[key];
 
-                _this3.data.userInfo.like.push('sh' + key);
+                _this7.data.userInfo.like.push('sh' + key);
 
-                _this3.data.userInfo.data['sh' + key] = element;
-
-                _this3.jiacang('sh' + key);
+                _this7.data.userInfo.data['sh' + key] = element;
               }
             }
 
-            _this3.creatTable();
+            _this7.creatTable();
 
-            saveUserInfo(_this3.data.userInfo);
+            setTimeout(function() {
+              _this7.updata();
+            }, 1000);
+          })["catch"](function(error) {
+            return console.log('error', error);
+          });
+        },
+        "jiacang": function jiacang(key) {
+          console.log(key);
+
+          if (!this.data.userInfo.buyInfo[key]) {
+            this.data.userInfo.buyInfo[key] = {
+              num: 0,
+              "in": 0,
+              out: 0
+            };
+          }
+
+          this.data.userInfo.allNumber -= 50000;
+          var nowP = this.data.userInfo.data[key][2];
+
+          if (this.data.userInfo.buyInfo[key].num == 0) {
+            this.data.userInfo.buyInfo[key]["in"] = nowP;
           } else {
-            alert('股票代码错误!');
+            this.data.userInfo.buyInfo[key]["in"] = (nowP * 50000 + this.data.userInfo.buyInfo[key]["in"] * this.data.userInfo.buyInfo[key].num) / (50000 + this.data.userInfo.buyInfo[key].num);
           }
-        }
-      })["catch"](function (error) {
-        return console.log('error', error);
-      });
-    },
-    "changeM": function changeM(id) {
-      var _this4 = this;
 
-      console.log(this.$target.value);
-      this.data.userInfo.buyInfo['sh' + id].setNum = 2;
-      saveUserInfo(this.data.userInfo);
-      setTimeout(function () {
-        _this4.creatTable();
-      }, 0);
-    },
-    "changeM2": function changeM2(id) {
-      var _this5 = this;
-
-      console.log(this.$target.value);
-      this.data.userInfo.buyInfo['sh' + id].setNum2 = 2;
-      saveUserInfo(this.data.userInfo);
-      setTimeout(function () {
-        _this5.creatTable();
-      }, 0);
-    },
-    "delateKey": function delateKey(key) {
-      var newList = [];
-      this.data.userInfo.like.forEach(function (element) {
-        if (element !== 'key') {
-          newList.push(key);
-        }
-      });
-      this.data.userInfo.like = [];
-      this.data.userInfo.data[key] = [];
-      owo.script.page.creatTable();
-      saveUserInfo(this.data.userInfo);
-    },
-    "updata": function updata() {
-      var _this6 = this;
-
-      if (!this.data.userInfo.like || this.data.userInfo.like.lenghth == 0) {
-        setTimeout(function () {
-          _this6.updata();
-        }, 1000);
-        return;
-      }
-
-      var requestOptions = {
-        method: 'POST',
-        body: JSON.stringify(this.data.userInfo.like),
-        redirect: 'follow'
-      };
-      fetch("https://going.run/gupiao?route=query", requestOptions).then(function (response) {
-        return response.json();
-      }).then(function (result) {
-        _this6.data.userInfo.like = []; // console.log(result)
-
-        for (var key in result.data) {
-          if (result.data.hasOwnProperty.call(result.data, key)) {
-            var element = result.data[key];
-
-            _this6.data.userInfo.like.push('sh' + key);
-
-            _this6.data.userInfo.data['sh' + key] = element;
+          this.data.userInfo.buyInfo[key].num += 50000 / nowP;
+          saveUserInfo(this.data.userInfo);
+        },
+        "qingcang": function qingcang(key, clearNumber) {
+          if (!this.data.userInfo.buyInfo[key] || this.data.userInfo.buyInfo[key].num == 0) {
+            return;
           }
+
+          var userBuyNum = this.data.userInfo.buyInfo[key].num;
+          clearNumber = clearNumber || userBuyNum;
+          this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2];
+          console.log(this.data.userInfo.data[key][2], userBuyNum);
+          this.data.userInfo.allNumber += this.data.userInfo.data[key][2] * clearNumber;
+          var inNum = this.data.userInfo.buyInfo[key]["in"];
+          var outNum = this.data.userInfo.buyInfo[key].out;
+          var yingkui = (outNum - inNum) * clearNumber;
+          this.data.userInfo.log += this.data.userInfo.data[key][0] + " \u4E70\u5165\u4EF7\u683C " + inNum + " \u5356\u51FA\u4EF7\u683C " + outNum + " \u76C8\u5229 " + yingkui.toFixed(2) + "\u5143;<br>";
+          this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - clearNumber;
+          saveUserInfo(this.data.userInfo);
+        },
+        "addAll": function addAll() {
+          var _this8 = this;
+
+          console.log('全部加仓!');
+          this.data.userInfo.like.forEach(function(element) {
+            _this8.jiacang(element);
+          });
+        },
+        "clearAll": function clearAll() {
+          var _this9 = this;
+
+          console.log('全部清仓!');
+          this.data.userInfo.like.forEach(function(element) {
+            _this9.qingcang(element);
+          });
+        },
+        "clear10": function clear10() {
+          var _this10 = this;
+
+          console.log('全部减仓10%!');
+          this.data.userInfo.like.forEach(function(element) {
+            var clearNumber = _this10.data.userInfo.buyInfo[element].num * 0.1;
+
+            _this10.qingcang(element, clearNumber);
+          });
+        },
+        "clearLog": function clearLog() {
+          this.data.userInfo.log = '';
+          saveUserInfo(this.data.userInfo);
+          setTimeout(function() {
+            owo.script.page.creatTable();
+          }, 0);
         }
-
-        _this6.creatTable();
-
-        setTimeout(function () {
-          _this6.updata();
-        }, 1000);
-      })["catch"](function (error) {
-        return console.log('error', error);
-      });
-    },
-    "jiacang": function jiacang(key) {
-      console.log(key);
-
-      if (!this.data.userInfo.buyInfo[key]) {
-        this.data.userInfo.buyInfo[key] = {
-          num: 0,
-          "in": 0,
-          out: 0
-        };
       }
+    };
+  </script>
 
-      this.data.userInfo.allNumber -= 50000;
-      var nowP = this.data.userInfo.data[key][2];
+  <script src="./static/js/idangerous.swiper2.7.6.min.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="./static/js/main.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="./static/js/jquery-1.11.1.min.js" type="text/javascript" charset="UTF-8"></script>
 
-      if (this.data.userInfo.buyInfo[key].num == 0) {
-        this.data.userInfo.buyInfo[key]["in"] = nowP;
-      } else {
-        this.data.userInfo.buyInfo[key]["in"] = (nowP * 50000 + this.data.userInfo.buyInfo[key]["in"] * this.data.userInfo.buyInfo[key].num) / (50000 + this.data.userInfo.buyInfo[key].num);
-      }
+  <script src="./static/js/toast.js" type="text/javascript" charset="UTF-8"></script>
+</body>
 
-      this.data.userInfo.buyInfo[key].num += 50000 / nowP;
-      saveUserInfo(this.data.userInfo);
-    },
-    "qingcang": function qingcang(key, clearNumber) {
-      if (!this.data.userInfo.buyInfo[key] || this.data.userInfo.buyInfo[key].num == 0) {
-        return;
-      }
-
-      var userBuyNum = this.data.userInfo.buyInfo[key].num;
-      clearNumber = clearNumber || userBuyNum;
-      this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2];
-      console.log(this.data.userInfo.data[key][2], userBuyNum);
-      this.data.userInfo.allNumber += this.data.userInfo.data[key][2] * clearNumber;
-      var inNum = this.data.userInfo.buyInfo[key]["in"];
-      var outNum = this.data.userInfo.buyInfo[key].out;
-      var yingkui = (outNum - inNum) * clearNumber;
-      this.data.userInfo.log += this.data.userInfo.data[key][0] + " \u4E70\u5165\u4EF7\u683C " + inNum + " \u5356\u51FA\u4EF7\u683C " + outNum + " \u76C8\u5229 " + yingkui.toFixed(2) + "\u5143;<br>";
-      this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - clearNumber;
-      saveUserInfo(this.data.userInfo);
-    },
-    "addAll": function addAll() {
-      var _this7 = this;
-
-      console.log('全部加仓!');
-      this.data.userInfo.like.forEach(function (element) {
-        _this7.jiacang(element);
-      });
-    },
-    "clearAll": function clearAll() {
-      var _this8 = this;
-
-      console.log('全部清仓!');
-      this.data.userInfo.like.forEach(function (element) {
-        _this8.qingcang(element);
-      });
-    },
-    "clear10": function clear10() {
-      var _this9 = this;
-
-      console.log('全部减仓10%!');
-      this.data.userInfo.like.forEach(function (element) {
-        var clearNumber = _this9.data.userInfo.buyInfo[element].num * 0.1;
-
-        _this9.qingcang(element, clearNumber);
-      });
-    },
-    "clearLog": function clearLog() {
-      this.data.userInfo.log = '';
-      saveUserInfo(this.data.userInfo);
-      setTimeout(function () {
-        owo.script.page.creatTable();
-      }, 0);
-    }
-  }
-};
-</script>
-
-    <script src="https://cunchu.site/owo/script/idangerous.swiper2.7.6.min.js" type="text/javascript"  charset="UTF-8"></script>
-    <script src="./static/js/main.js" type="text/javascript"  charset="UTF-8"></script>
-
-    <script src="./static/js/toast.js" type="text/javascript"  charset="UTF-8"></script>
-  </body>
 </html>

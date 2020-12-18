@@ -96,6 +96,7 @@
             out: 0
           }
         }
+        console.log(this.data.userInfo)
         buyInfo.setNum = buyInfo.setNum || 0
         buyInfo.setNum2 = buyInfo.setNum2 || 0
         buyInfo.setNumTime = buyInfo.setNumTime || 0
@@ -171,14 +172,16 @@
     delateKey: function (key) {
       let newList = []
       this.data.userInfo.like.forEach(element => {
-        if (element !== 'key') {
+        if (element !== key) {
           newList.push(key)
         }
       })
-      this.data.userInfo.like = []
+      this.data.userInfo.like = newList
       this.data.userInfo.data[key] = []
-      owo.script.page.creatTable()
       saveUserInfo(this.data.userInfo)
+      setTimeout(() => {
+        this.creatTable()
+      }, 100);
     },
     updata: function () {
       if (!this.data.userInfo.like || this.data.userInfo.like.lenghth == 0) {
