@@ -72,19 +72,15 @@
       let newHtml = `<tr>
       <th>编号</th>
       <th>股票代码</th>
+      <th>当前价格</th>
       <th>低吸%</th>
       <th>高抛%</th>
-      <th>当前价格</th>
-      <th>开盘价格</th>
-      <th>涨跌</th>
-      <th>涨跌%</th>
       <th>振幅%</th>
-      <th>持有数量</th>
-      <th>买入价格</th>
-      <th>卖出价格</th>
       <th>累计盈亏</th>
-      <th>下次买入价</th>
-      <th>下次卖出</th>
+      <th>预买价</th>
+      <th>预卖价</th>
+      <th>低吸次数</th>
+      <th>高抛次数</th>
       <th>其他操作</th>
       </tr>`
       const gupiaoData = this.data.userInfo.data
@@ -102,23 +98,21 @@
         }
         buyInfo.setNum = buyInfo.setNum || 0
         buyInfo.setNum2 = buyInfo.setNum2 || 0
+        buyInfo.setNumTime = buyInfo.setNumTime || 0
+        buyInfo.setNum2Time = buyInfo.setNum2Time || 0
         newHtml += `<tr>
           <td>${ind}</td>
           <td>${element}</td>
+          <td>${item[2]}</td>
           <td><input type="number" o-input="changeM(${item[1]})" value="${buyInfo.setNum}"></td>
           <td><input type="number" o-input="changeM2(${item[1]})" value="${buyInfo.setNum2}"></td>
-          <td>${item[2]}</td>
-          <td>${item[3]}</td>
-          <td>${item[30]}</td>
-          <td>${item[31]}%</td>
           <td>${item[41]}%</td>
-          <td>${buyInfo.num.toFixed(2)}</td>
-          <td>${buyInfo.in}</td>
-          <td>${buyInfo.out}</td>
           <td>${((item[2] - buyInfo.in) * buyInfo.num).toFixed(2)}元</td>
           <td>${(buyInfo.in * (100 - buyInfo.setNum) / 100).toFixed(2)}元</td>
           <td>${(buyInfo.in * (100 + buyInfo.setNum2) / 100).toFixed(2)}元</td>
-          <td><span o-tap="delateKey('${element}')">删除</span><span o-tap="jiacang('${element}')">加仓</span><span o-tap="qingcang('${element}')">清仓</span></td>
+          <td>${buyInfo.setNumTime}</td>
+          <td>${buyInfo.setNum2Time}</td>
+          <td><span o-tap="delateKey('${element}')">删除</span></td>
           </tr>`
       })
       // console.log(this)
@@ -145,8 +139,10 @@
                   const element = result.data[key];
                   this.data.userInfo.like.push('sh' + key)
                   this.data.userInfo.data['sh' + key] = element
+                  this.jiacang('sh' + key)
                 }
               }
+              
               this.creatTable()
               saveUserInfo(this.data.userInfo)
             } else {
@@ -226,14 +222,14 @@
           out: 0
         }
       }
-      this.data.userInfo.allNumber -= 5000
+      this.data.userInfo.allNumber -= 50000
       let nowP = this.data.userInfo.data[key][2]
       if (this.data.userInfo.buyInfo[key].num == 0) {
         this.data.userInfo.buyInfo[key].in = nowP
       } else {
-        this.data.userInfo.buyInfo[key].in = ((nowP * 5000) + (this.data.userInfo.buyInfo[key].in * this.data.userInfo.buyInfo[key].num)) / (5000 + this.data.userInfo.buyInfo[key].num)
+        this.data.userInfo.buyInfo[key].in = ((nowP * 50000) + (this.data.userInfo.buyInfo[key].in * this.data.userInfo.buyInfo[key].num)) / (50000 + this.data.userInfo.buyInfo[key].num)
       }
-      this.data.userInfo.buyInfo[key].num += (5000 / nowP)
+      this.data.userInfo.buyInfo[key].num += (50000 / nowP)
       
       saveUserInfo(this.data.userInfo)
     },
@@ -320,10 +316,10 @@ td {
   left: 0;
 }
 .conn {
-  height: calc(100% - 340px);
+  height: calc(100% - 450px);
 }
 .log-box {
-  height: 243px;
+  height: 353px;
   padding: 10px;
   border-top: 1px solid #ccc;
   overflow: auto;

@@ -95,7 +95,7 @@ owo.script = {
       }
 
       this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber + '元';
-      var newHtml = "<tr>\n      <th>\u7F16\u53F7</th>\n      <th>\u80A1\u7968\u4EE3\u7801</th>\n      <th>\u4F4E\u5438%</th>\n      <th>\u9AD8\u629B%</th>\n      <th>\u5F53\u524D\u4EF7\u683C</th>\n      <th>\u5F00\u76D8\u4EF7\u683C</th>\n      <th>\u6DA8\u8DCC</th>\n      <th>\u6DA8\u8DCC%</th>\n      <th>\u632F\u5E45%</th>\n      <th>\u6301\u6709\u6570\u91CF</th>\n      <th>\u4E70\u5165\u4EF7\u683C</th>\n      <th>\u5356\u51FA\u4EF7\u683C</th>\n      <th>\u7D2F\u8BA1\u76C8\u4E8F</th>\n      <th>\u4E0B\u6B21\u4E70\u5165\u4EF7</th>\n      <th>\u4E0B\u6B21\u5356\u51FA</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
+      var newHtml = "<tr>\n      <th>\u7F16\u53F7</th>\n      <th>\u80A1\u7968\u4EE3\u7801</th>\n      <th>\u5F53\u524D\u4EF7\u683C</th>\n      <th>\u4F4E\u5438%</th>\n      <th>\u9AD8\u629B%</th>\n      <th>\u632F\u5E45%</th>\n      <th>\u7D2F\u8BA1\u76C8\u4E8F</th>\n      <th>\u9884\u4E70\u4EF7</th>\n      <th>\u9884\u5356\u4EF7</th>\n      <th>\u4F4E\u5438\u6B21\u6570</th>\n      <th>\u9AD8\u629B\u6B21\u6570</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
       var gupiaoData = this.data.userInfo.data;
       var ind = 0;
       this.data.userInfo.like.forEach(function (element) {
@@ -113,7 +113,9 @@ owo.script = {
 
         buyInfo.setNum = buyInfo.setNum || 0;
         buyInfo.setNum2 = buyInfo.setNum2 || 0;
-        newHtml += "<tr>\n          <td>" + ind + "</td>\n          <td>" + element + "</td>\n          <td><input type=\"number\" o-input=\"changeM(" + item[1] + ")\" value=\"" + buyInfo.setNum + "\"></td>\n          <td><input type=\"number\" o-input=\"changeM2(" + item[1] + ")\" value=\"" + buyInfo.setNum2 + "\"></td>\n          <td>" + item[2] + "</td>\n          <td>" + item[3] + "</td>\n          <td>" + item[30] + "</td>\n          <td>" + item[31] + "%</td>\n          <td>" + item[41] + "%</td>\n          <td>" + buyInfo.num.toFixed(2) + "</td>\n          <td>" + buyInfo["in"] + "</td>\n          <td>" + buyInfo.out + "</td>\n          <td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 - buyInfo.setNum) / 100).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 + buyInfo.setNum2) / 100).toFixed(2) + "\u5143</td>\n          <td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span><span o-tap=\"jiacang('" + element + "')\">\u52A0\u4ED3</span><span o-tap=\"qingcang('" + element + "')\">\u6E05\u4ED3</span></td>\n          </tr>";
+        buyInfo.setNumTime = buyInfo.setNumTime || 0;
+        buyInfo.setNum2Time = buyInfo.setNum2Time || 0;
+        newHtml += "<tr>\n          <td>" + ind + "</td>\n          <td>" + element + "</td>\n          <td>" + item[2] + "</td>\n          <td><input type=\"number\" o-input=\"changeM(" + item[1] + ")\" value=\"" + buyInfo.setNum + "\"></td>\n          <td><input type=\"number\" o-input=\"changeM2(" + item[1] + ")\" value=\"" + buyInfo.setNum2 + "\"></td>\n          <td>" + item[41] + "%</td>\n          <td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 - buyInfo.setNum) / 100).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 + buyInfo.setNum2) / 100).toFixed(2) + "\u5143</td>\n          <td>" + buyInfo.setNumTime + "</td>\n          <td>" + buyInfo.setNum2Time + "</td>\n          <td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span></td>\n          </tr>";
       }); // console.log(this)
 
       this.query('table').innerHTML = newHtml;
@@ -143,6 +145,8 @@ owo.script = {
                 _this3.data.userInfo.like.push('sh' + key);
 
                 _this3.data.userInfo.data['sh' + key] = element;
+
+                _this3.jiacang('sh' + key);
               }
             }
 
@@ -239,16 +243,16 @@ owo.script = {
         };
       }
 
-      this.data.userInfo.allNumber -= 5000;
+      this.data.userInfo.allNumber -= 50000;
       var nowP = this.data.userInfo.data[key][2];
 
       if (this.data.userInfo.buyInfo[key].num == 0) {
         this.data.userInfo.buyInfo[key]["in"] = nowP;
       } else {
-        this.data.userInfo.buyInfo[key]["in"] = (nowP * 5000 + this.data.userInfo.buyInfo[key]["in"] * this.data.userInfo.buyInfo[key].num) / (5000 + this.data.userInfo.buyInfo[key].num);
+        this.data.userInfo.buyInfo[key]["in"] = (nowP * 50000 + this.data.userInfo.buyInfo[key]["in"] * this.data.userInfo.buyInfo[key].num) / (50000 + this.data.userInfo.buyInfo[key].num);
       }
 
-      this.data.userInfo.buyInfo[key].num += 5000 / nowP;
+      this.data.userInfo.buyInfo[key].num += 50000 / nowP;
       saveUserInfo(this.data.userInfo);
     },
     "qingcang": function qingcang(key, clearNumber) {

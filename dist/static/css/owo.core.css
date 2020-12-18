@@ -91,11 +91,11 @@ td span {
 }
 
 .conn {
-  height: calc(100% - 340px);
+  height: calc(100% - 450px);
 }
 
 .log-box {
-  height: 243px;
+  height: 353px;
   padding: 10px;
   border-top: 1px solid #ccc;
   overflow: auto;
