@@ -19,7 +19,7 @@
   var appType = 'gupiao'
   module.exports = {
     data: {
-      searchText: 'sh600017',
+      searchText: 'sz159975',
       userInfo: {
         allNumber: 100000000,
         like: [],
@@ -57,9 +57,9 @@
           owo.tool.toast(res.message)
         }
       })
-      setTimeout(() => {
-        this.updata()
-      }, 1000);
+      // setTimeout(() => {
+      //   this.updata()
+      // }, 1000);
     },
     creatTable: function () {
       if (!this.data.userInfo.buyInfo) {
@@ -72,11 +72,14 @@
       let newHtml = `<tr>
       <th>编号</th>
       <th>股票代码</th>
+      <th>监控价</th>
       <th>当前价格</th>
       <th>低吸%</th>
+      <th>低吸金额</th>
       <th>高抛%</th>
+      <th>高抛金额</th>
       <th>振幅%</th>
-      <th>累计盈亏</th>
+      <th>滚动盈利</th>
       <th>预买价</th>
       <th>预卖价</th>
       <th>低吸次数</th>
@@ -89,6 +92,7 @@
         ind++
         const item = gupiaoData[element]
         let buyInfo = this.data.userInfo.buyInfo[element]
+        console.log(buyInfo)
         if (!buyInfo) {
           buyInfo = {
             num: 0,
@@ -101,19 +105,24 @@
         buyInfo.setNum2 = buyInfo.setNum2 || 0
         buyInfo.setNumTime = buyInfo.setNumTime || 0
         buyInfo.setNum2Time = buyInfo.setNum2Time || 0
+        buyInfo.in = parseFloat(buyInfo.in)
+        console.log(item[1])
         newHtml += `<tr>
           <td>${ind}</td>
           <td>${element}</td>
+          <th>${(buyInfo.in).toFixed(2)}</th>
           <td>${item[2]}</td>
-          <td><input type="number" o-input="changeM(${item[1]})" value="${buyInfo.setNum}"></td>
-          <td><input type="number" o-input="changeM2(${item[1]})" value="${buyInfo.setNum2}"></td>
+          <td><input type="number" o-blur="changeM(${item[1]})" value="${buyInfo.setNum}"></td>
+          <td><input type="number" o-blur="changeMN(${item[1]})" value="${buyInfo.setNumMoney}"></td>
+          <td><input type="number" o-blur="changeM2(${item[1]})" value="${buyInfo.setNum2}"></td>
+          <td><input type="number" o-blur="changeM2N(${item[1]})" value="${buyInfo.setNum2Money}"></td>
           <td>${item[41]}%</td>
           <td>${((item[2] - buyInfo.in) * buyInfo.num).toFixed(2)}元</td>
           <td>${(buyInfo.in * (100 - buyInfo.setNum) / 100).toFixed(2)}元</td>
           <td>${(buyInfo.in * (100 + buyInfo.setNum2) / 100).toFixed(2)}元</td>
           <td>${buyInfo.setNumTime}</td>
           <td>${buyInfo.setNum2Time}</td>
-          <td><span o-tap="delateKey('${element}')">删除</span></td>
+          <td><span o-tap="delateKey('${element}')">删除</span><span o-tap="jiacang('${element}')">加仓</span><span o-tap="qingcang('${element}')">清仓</span></td>
           </tr>`
       })
       // console.log(this)
@@ -129,6 +138,7 @@
         body: JSON.stringify([this.data.searchText]),
         redirect: 'follow'
       };
+      console.log(requestOptions)
       fetch("https://going.run/gupiao?route=query", requestOptions)
         .then(response => response.json())
         .then((result) => {
@@ -138,9 +148,11 @@
               for (const key in result.data) {
                 if (result.data.hasOwnProperty.call(result.data, key)) {
                   const element = result.data[key];
-                  this.data.userInfo.like.push('sh' + key)
-                  this.data.userInfo.data['sh' + key] = element
-                  this.jiacang('sh' + key)
+                  element.setNumMoney = 5000
+                  element.setNum2Money = 5000
+                  this.data.userInfo.like.push(key)
+                  this.data.userInfo.data[key] = element
+                  this.jiacang(key)
                 }
               }
               
@@ -155,7 +167,15 @@
     },
     changeM: function (id) {
       console.log(this.$target.value)
-      this.data.userInfo.buyInfo['sh' + id].setNum = 2
+      this.data.userInfo.buyInfo[id].setNum = 2
+      saveUserInfo(this.data.userInfo)
+      setTimeout(() => {
+        this.creatTable()
+      }, 0);
+    },
+    changeMN: function (id) {
+      console.log(this.$target.value)
+      this.data.userInfo.buyInfo[id].setNumMoney = 5000
       saveUserInfo(this.data.userInfo)
       setTimeout(() => {
         this.creatTable()
@@ -163,7 +183,15 @@
     },
     changeM2: function (id) {
       console.log(this.$target.value)
-      this.data.userInfo.buyInfo['sh' + id].setNum2 = 2
+      this.data.userInfo.buyInfo[id].setNum2 = 2
+      saveUserInfo(this.data.userInfo)
+      setTimeout(() => {
+        this.creatTable()
+      }, 0);
+    },
+    changeM2N: function (id) {
+      console.log(this.$target.value)
+      this.data.userInfo.buyInfo[id].setNum2Money = 5000
       saveUserInfo(this.data.userInfo)
       setTimeout(() => {
         this.creatTable()
@@ -205,8 +233,8 @@
           for (const key in result.data) {
             if (result.data.hasOwnProperty.call(result.data, key)) {
               const element = result.data[key];
-              this.data.userInfo.like.push('sh' + key)
-              this.data.userInfo.data['sh' + key] = element
+              this.data.userInfo.like.push(key)
+              this.data.userInfo.data[key] = element
             }
           }
           this.creatTable()
@@ -340,7 +368,6 @@ td input {
   display: block;
   width: 100%;
   height: 100%;
-  border: none;
   text-align: center;
 }
 </style>
