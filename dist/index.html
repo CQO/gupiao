@@ -90,8 +90,8 @@ owo.script = {
         return;
       }
 
-      this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber + '元';
-      var newHtml = "<tr>\n      <th>\u7F16\u53F7</th>\n      <th>\u80A1\u7968\u4EE3\u7801</th>\n      <th>\u76D1\u63A7\u4EF7</th>\n      <th>\u5F53\u524D\u4EF7\u683C</th>\n      <th>\u4F4E\u5438%</th>\n      <th>\u4F4E\u5438\u91D1\u989D</th>\n      <th>\u9AD8\u629B%</th>\n      <th>\u9AD8\u629B\u91D1\u989D</th>\n      <th>\u632F\u5E45%</th>\n      <th>\u6EDA\u52A8\u76C8\u5229</th>\n      <th>\u9884\u4E70\u4EF7</th>\n      <th>\u9884\u5356\u4EF7</th>\n      <th>\u4F4E\u5438\u6B21\u6570</th>\n      <th>\u9AD8\u629B\u6B21\u6570</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
+      this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber.toFixed(2) + '元';
+      var newHtml = "<tr>\n      <th>\u7F16\u53F7</th>\n      <th>\u80A1\u7968\u4EE3\u7801</th>\n      <th style=\"width: 65px;\">\u76D1\u63A7\u4EF7</th>\n      <th style=\"width: 65px;\">\u5F53\u524D\u4EF7\u683C</th>\n      <th style=\"width: 65px;\">\u6301\u4ED3\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438%</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B%</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u632F\u5E45%</th>\n      <th style=\"width: 65px;\">\u6EDA\u52A8\u76C8\u5229</th>\n      <th style=\"width: 65px;\">\u9884\u4E70\u4EF7</th>\n      <th style=\"width: 65px;\">\u9884\u5356\u4EF7</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u6B21\u6570</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u6B21\u6570</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
       var gupiaoData = this.data.userInfo.data;
       var ind = 0;
       this.data.userInfo.like.forEach(function (element) {
@@ -115,7 +115,7 @@ owo.script = {
         buyInfo.setNum2Time = buyInfo.setNum2Time || 0;
         buyInfo["in"] = parseFloat(buyInfo["in"]);
         console.log(item[1]);
-        newHtml += "<tr>\n          <td>" + ind + "</td>\n          <td>" + element + "</td>\n          <th>" + buyInfo["in"].toFixed(2) + "</th>\n          <td>" + item[2] + "</td>\n          <td><input type=\"number\" o-blur=\"changeM(" + item[1] + ")\" value=\"" + buyInfo.setNum + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeMN(" + item[1] + ")\" value=\"" + buyInfo.setNumMoney + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeM2(" + item[1] + ")\" value=\"" + buyInfo.setNum2 + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeM2N(" + item[1] + ")\" value=\"" + buyInfo.setNum2Money + "\"></td>\n          <td>" + item[41] + "%</td>\n          <td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 - buyInfo.setNum) / 100).toFixed(2) + "\u5143</td>\n          <td>" + (buyInfo["in"] * (100 + buyInfo.setNum2) / 100).toFixed(2) + "\u5143</td>\n          <td>" + buyInfo.setNumTime + "</td>\n          <td>" + buyInfo.setNum2Time + "</td>\n          <td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span><span o-tap=\"jiacang('" + element + "')\">\u52A0\u4ED3</span><span o-tap=\"qingcang('" + element + "')\">\u6E05\u4ED3</span></td>\n          </tr>";
+        newHtml += "<tr>\n          <td>" + ind + "</td>\n          <td>" + element + "</td>\n          <th>" + buyInfo["in"].toFixed(2) + "</th>\n          <td>" + item[2] + "</td>\n          <td>" + (buyInfo.num * buyInfo["in"]).toFixed(2) + "\u5143</td>\n          <td><input type=\"number\" o-blur=\"changeM(" + item[1] + ")\" value=\"" + buyInfo.setNum + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeMN(" + item[1] + ")\" value=\"" + buyInfo.setNumMoney + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeM2(" + item[1] + ")\" value=\"" + buyInfo.setNum2 + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeM2N(" + item[1] + ")\" value=\"" + buyInfo.setNum2Money + "\"></td>\n          <td>" + item[41] + "%</td>\n          <td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td>\n          <td><b style=\"color: red\">" + (buyInfo["in"] * (100 - parseFloat(buyInfo.setNum)) / 100).toFixed(2) + "</b>\u5143</td>\n          <td><b style=\"color: red\">" + (buyInfo["in"] * (100 + parseFloat(buyInfo.setNum2)) / 100).toFixed(2) + "</b>\u5143</td>\n          <td>" + buyInfo.setNumTime + "</td>\n          <td>" + buyInfo.setNum2Time + "</td>\n          <td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span><span o-tap=\"jiacang('" + element + "')\">\u52A0\u4ED3</span><span o-tap=\"qingcang('" + element + "')\">\u6E05\u4ED3</span></td>\n          </tr>";
       }); // console.log(this)
 
       this.query('table').innerHTML = newHtml;
@@ -168,7 +168,7 @@ owo.script = {
       var _this3 = this;
 
       console.log(this.$target.value);
-      this.data.userInfo.buyInfo[id].setNum = 2;
+      this.data.userInfo.buyInfo[id].setNum = this.$target.value;
       saveUserInfo(this.data.userInfo);
       setTimeout(function () {
         _this3.creatTable();
@@ -177,8 +177,8 @@ owo.script = {
     "changeMN": function changeMN(id) {
       var _this4 = this;
 
-      console.log(this.$target.value);
-      this.data.userInfo.buyInfo[id].setNumMoney = 5000;
+      this.data.userInfo.buyInfo[id].setNumMoney = this.$target.value;
+      console.log(this.data.userInfo.buyInfo[id]);
       saveUserInfo(this.data.userInfo);
       setTimeout(function () {
         _this4.creatTable();
@@ -188,7 +188,7 @@ owo.script = {
       var _this5 = this;
 
       console.log(this.$target.value);
-      this.data.userInfo.buyInfo[id].setNum2 = 2;
+      this.data.userInfo.buyInfo[id].setNum2 = this.$target.value;
       saveUserInfo(this.data.userInfo);
       setTimeout(function () {
         _this5.creatTable();
@@ -198,7 +198,7 @@ owo.script = {
       var _this6 = this;
 
       console.log(this.$target.value);
-      this.data.userInfo.buyInfo[id].setNum2Money = 5000;
+      this.data.userInfo.buyInfo[id].setNum2Money = this.$target.value;
       saveUserInfo(this.data.userInfo);
       setTimeout(function () {
         _this6.creatTable();
@@ -207,12 +207,14 @@ owo.script = {
     "delateKey": function delateKey(key) {
       var _this7 = this;
 
+      this.qingcang(key);
       var newList = [];
       this.data.userInfo.like.forEach(function (element) {
         if (element !== key) {
-          newList.push(key);
+          newList.push(element);
         }
       });
+      console.log(newList);
       this.data.userInfo.like = newList;
       this.data.userInfo.data[key] = [];
       saveUserInfo(this.data.userInfo);

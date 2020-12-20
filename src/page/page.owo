@@ -68,22 +68,23 @@
       if (!this.data.userInfo.like || this.data.userInfo.like.length == 0) {
         return
       }
-      this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber + '元'
+      this.query('.my-code').innerText = '我的资金:' + (this.data.userInfo.allNumber).toFixed(2) + '元'
       let newHtml = `<tr>
       <th>编号</th>
       <th>股票代码</th>
-      <th>监控价</th>
-      <th>当前价格</th>
-      <th>低吸%</th>
-      <th>低吸金额</th>
-      <th>高抛%</th>
-      <th>高抛金额</th>
-      <th>振幅%</th>
-      <th>滚动盈利</th>
-      <th>预买价</th>
-      <th>预卖价</th>
-      <th>低吸次数</th>
-      <th>高抛次数</th>
+      <th style="width: 65px;">监控价</th>
+      <th style="width: 65px;">当前价格</th>
+      <th style="width: 65px;">持仓金额</th>
+      <th style="width: 65px;">低吸%</th>
+      <th style="width: 65px;">低吸金额</th>
+      <th style="width: 65px;">高抛%</th>
+      <th style="width: 65px;">高抛金额</th>
+      <th style="width: 65px;">振幅%</th>
+      <th style="width: 65px;">滚动盈利</th>
+      <th style="width: 65px;">预买价</th>
+      <th style="width: 65px;">预卖价</th>
+      <th style="width: 65px;">低吸次数</th>
+      <th style="width: 65px;">高抛次数</th>
       <th>其他操作</th>
       </tr>`
       const gupiaoData = this.data.userInfo.data
@@ -112,14 +113,15 @@
           <td>${element}</td>
           <th>${(buyInfo.in).toFixed(2)}</th>
           <td>${item[2]}</td>
+          <td>${(buyInfo.num * buyInfo.in).toFixed(2)}元</td>
           <td><input type="number" o-blur="changeM(${item[1]})" value="${buyInfo.setNum}"></td>
           <td><input type="number" o-blur="changeMN(${item[1]})" value="${buyInfo.setNumMoney}"></td>
           <td><input type="number" o-blur="changeM2(${item[1]})" value="${buyInfo.setNum2}"></td>
           <td><input type="number" o-blur="changeM2N(${item[1]})" value="${buyInfo.setNum2Money}"></td>
           <td>${item[41]}%</td>
           <td>${((item[2] - buyInfo.in) * buyInfo.num).toFixed(2)}元</td>
-          <td>${(buyInfo.in * (100 - buyInfo.setNum) / 100).toFixed(2)}元</td>
-          <td>${(buyInfo.in * (100 + buyInfo.setNum2) / 100).toFixed(2)}元</td>
+          <td><b style="color: red">${(buyInfo.in * (100 - parseFloat(buyInfo.setNum)) / 100).toFixed(2)}</b>元</td>
+          <td><b style="color: red">${(buyInfo.in * (100 + parseFloat(buyInfo.setNum2)) / 100).toFixed(2)}</b>元</td>
           <td>${buyInfo.setNumTime}</td>
           <td>${buyInfo.setNum2Time}</td>
           <td><span o-tap="delateKey('${element}')">删除</span><span o-tap="jiacang('${element}')">加仓</span><span o-tap="qingcang('${element}')">清仓</span></td>
@@ -167,15 +169,15 @@
     },
     changeM: function (id) {
       console.log(this.$target.value)
-      this.data.userInfo.buyInfo[id].setNum = 2
+      this.data.userInfo.buyInfo[id].setNum = this.$target.value
       saveUserInfo(this.data.userInfo)
       setTimeout(() => {
         this.creatTable()
       }, 0);
     },
     changeMN: function (id) {
-      console.log(this.$target.value)
-      this.data.userInfo.buyInfo[id].setNumMoney = 5000
+      this.data.userInfo.buyInfo[id].setNumMoney = this.$target.value
+      console.log(this.data.userInfo.buyInfo[id])
       saveUserInfo(this.data.userInfo)
       setTimeout(() => {
         this.creatTable()
@@ -183,7 +185,7 @@
     },
     changeM2: function (id) {
       console.log(this.$target.value)
-      this.data.userInfo.buyInfo[id].setNum2 = 2
+      this.data.userInfo.buyInfo[id].setNum2 = this.$target.value
       saveUserInfo(this.data.userInfo)
       setTimeout(() => {
         this.creatTable()
@@ -191,19 +193,22 @@
     },
     changeM2N: function (id) {
       console.log(this.$target.value)
-      this.data.userInfo.buyInfo[id].setNum2Money = 5000
+      this.data.userInfo.buyInfo[id].setNum2Money = this.$target.value
       saveUserInfo(this.data.userInfo)
       setTimeout(() => {
         this.creatTable()
       }, 0);
     },
     delateKey: function (key) {
+      this.qingcang(key)
       let newList = []
       this.data.userInfo.like.forEach(element => {
+        
         if (element !== key) {
-          newList.push(key)
+          newList.push(element)
         }
       })
+      console.log(newList)
       this.data.userInfo.like = newList
       this.data.userInfo.data[key] = []
       saveUserInfo(this.data.userInfo)
