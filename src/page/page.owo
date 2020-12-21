@@ -57,9 +57,9 @@
           owo.tool.toast(res.message)
         }
       })
-      // setTimeout(() => {
-      //   this.updata()
-      // }, 1000);
+      setTimeout(() => {
+        this.updata()
+      }, 1000);
     },
     creatTable: function () {
       if (!this.data.userInfo.buyInfo) {
@@ -68,10 +68,11 @@
       if (!this.data.userInfo.like || this.data.userInfo.like.length == 0) {
         return
       }
-      this.query('.my-code').innerText = '我的资金:' + (this.data.userInfo.allNumber).toFixed(2) + '元'
+      this.query('.my-code').innerText = '我的资金:' + (this.data.userInfo.allNumber).toFixed(2)
       let newHtml = `<tr>
       <th>编号</th>
       <th>股票代码</th>
+      <th style="width: 65px;">股票名称</th>
       <th style="width: 65px;">监控价</th>
       <th style="width: 65px;">当前价格</th>
       <th style="width: 65px;">持仓金额</th>
@@ -111,9 +112,10 @@
         newHtml += `<tr>
           <td>${ind}</td>
           <td>${element}</td>
+          <td>${item[0]}%</td>
           <th>${(buyInfo.in).toFixed(2)}</th>
           <td>${item[2]}</td>
-          <td>${(buyInfo.num * buyInfo.in).toFixed(2)}元</td>
+          <td>${(buyInfo.num * buyInfo.in).toFixed(2)}</td>
           <td><input type="number" o-blur="changeM(${item[1]})" value="${buyInfo.setNum}"></td>
           <td><input type="number" o-blur="changeMN(${item[1]})" value="${buyInfo.setNumMoney}"></td>
           <td><input type="number" o-blur="changeM2(${item[1]})" value="${buyInfo.setNum2}"></td>
@@ -148,14 +150,12 @@
           if (result.err == 0) {
             if (result.num > 0) {
               for (const key in result.data) {
-                if (result.data.hasOwnProperty.call(result.data, key)) {
-                  const element = result.data[key];
-                  element.setNumMoney = 5000
-                  element.setNum2Money = 5000
-                  this.data.userInfo.like.push(key)
-                  this.data.userInfo.data[key] = element
-                  this.jiacang(key)
-                }
+                const element = result.data[key];
+                element.setNumMoney = 5000
+                element.setNum2Money = 5000
+                this.data.userInfo.like.push(key)
+                this.data.userInfo.data[key] = element
+                this.jiacang(key)
               }
               
               this.creatTable()
@@ -220,7 +220,7 @@
       if (!this.data.userInfo.like || this.data.userInfo.like.lenghth == 0) {
         setTimeout(() => {
           this.updata()
-        }, 1000);
+        }, 2000);
         return
       }
       
@@ -245,7 +245,7 @@
           this.creatTable()
           setTimeout(() => {
             this.updata()
-          }, 1000);
+          }, 2000);
         })
         .catch(error => console.log('error', error));
     },

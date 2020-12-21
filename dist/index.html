@@ -47,6 +47,8 @@ owo.script = {
       }
     },
     "created": function created() {
+      var _this = this;
+
       fetch("http://going.run/userServer?route=loginSession", {
         method: 'POST',
         headers: {
@@ -75,12 +77,13 @@ owo.script = {
           owo.go('login');
           owo.tool.toast(res.message);
         }
-      }); // setTimeout(() => {
-      //   this.updata()
-      // }, 1000);
+      });
+      setTimeout(function () {
+        _this.updata();
+      }, 1000);
     },
     "creatTable": function creatTable() {
-      var _this = this;
+      var _this2 = this;
 
       if (!this.data.userInfo.buyInfo) {
         this.data.userInfo.buyInfo = {};
@@ -90,14 +93,14 @@ owo.script = {
         return;
       }
 
-      this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber.toFixed(2) + '元';
-      var newHtml = "<tr>\n      <th>\u7F16\u53F7</th>\n      <th>\u80A1\u7968\u4EE3\u7801</th>\n      <th style=\"width: 65px;\">\u76D1\u63A7\u4EF7</th>\n      <th style=\"width: 65px;\">\u5F53\u524D\u4EF7\u683C</th>\n      <th style=\"width: 65px;\">\u6301\u4ED3\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438%</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B%</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u632F\u5E45%</th>\n      <th style=\"width: 65px;\">\u6EDA\u52A8\u76C8\u5229</th>\n      <th style=\"width: 65px;\">\u9884\u4E70\u4EF7</th>\n      <th style=\"width: 65px;\">\u9884\u5356\u4EF7</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u6B21\u6570</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u6B21\u6570</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
+      this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber.toFixed(2);
+      var newHtml = "<tr>\n      <th>\u7F16\u53F7</th>\n      <th>\u80A1\u7968\u4EE3\u7801</th>\n      <th style=\"width: 65px;\">\u80A1\u7968\u540D\u79F0</th>\n      <th style=\"width: 65px;\">\u76D1\u63A7\u4EF7</th>\n      <th style=\"width: 65px;\">\u5F53\u524D\u4EF7\u683C</th>\n      <th style=\"width: 65px;\">\u6301\u4ED3\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438%</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B%</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u632F\u5E45%</th>\n      <th style=\"width: 65px;\">\u6EDA\u52A8\u76C8\u5229</th>\n      <th style=\"width: 65px;\">\u9884\u4E70\u4EF7</th>\n      <th style=\"width: 65px;\">\u9884\u5356\u4EF7</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u6B21\u6570</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u6B21\u6570</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
       var gupiaoData = this.data.userInfo.data;
       var ind = 0;
       this.data.userInfo.like.forEach(function (element) {
         ind++;
         var item = gupiaoData[element];
-        var buyInfo = _this.data.userInfo.buyInfo[element];
+        var buyInfo = _this2.data.userInfo.buyInfo[element];
         console.log(buyInfo);
 
         if (!buyInfo) {
@@ -108,24 +111,24 @@ owo.script = {
           };
         }
 
-        console.log(_this.data.userInfo);
+        console.log(_this2.data.userInfo);
         buyInfo.setNum = buyInfo.setNum || 0;
         buyInfo.setNum2 = buyInfo.setNum2 || 0;
         buyInfo.setNumTime = buyInfo.setNumTime || 0;
         buyInfo.setNum2Time = buyInfo.setNum2Time || 0;
         buyInfo["in"] = parseFloat(buyInfo["in"]);
         console.log(item[1]);
-        newHtml += "<tr>\n          <td>" + ind + "</td>\n          <td>" + element + "</td>\n          <th>" + buyInfo["in"].toFixed(2) + "</th>\n          <td>" + item[2] + "</td>\n          <td>" + (buyInfo.num * buyInfo["in"]).toFixed(2) + "\u5143</td>\n          <td><input type=\"number\" o-blur=\"changeM(" + item[1] + ")\" value=\"" + buyInfo.setNum + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeMN(" + item[1] + ")\" value=\"" + buyInfo.setNumMoney + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeM2(" + item[1] + ")\" value=\"" + buyInfo.setNum2 + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeM2N(" + item[1] + ")\" value=\"" + buyInfo.setNum2Money + "\"></td>\n          <td>" + item[41] + "%</td>\n          <td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td>\n          <td><b style=\"color: red\">" + (buyInfo["in"] * (100 - parseFloat(buyInfo.setNum)) / 100).toFixed(2) + "</b>\u5143</td>\n          <td><b style=\"color: red\">" + (buyInfo["in"] * (100 + parseFloat(buyInfo.setNum2)) / 100).toFixed(2) + "</b>\u5143</td>\n          <td>" + buyInfo.setNumTime + "</td>\n          <td>" + buyInfo.setNum2Time + "</td>\n          <td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span><span o-tap=\"jiacang('" + element + "')\">\u52A0\u4ED3</span><span o-tap=\"qingcang('" + element + "')\">\u6E05\u4ED3</span></td>\n          </tr>";
+        newHtml += "<tr>\n          <td>" + ind + "</td>\n          <td>" + element + "</td>\n          <td>" + item[0] + "%</td>\n          <th>" + buyInfo["in"].toFixed(2) + "</th>\n          <td>" + item[2] + "</td>\n          <td>" + (buyInfo.num * buyInfo["in"]).toFixed(2) + "</td>\n          <td><input type=\"number\" o-blur=\"changeM(" + item[1] + ")\" value=\"" + buyInfo.setNum + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeMN(" + item[1] + ")\" value=\"" + buyInfo.setNumMoney + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeM2(" + item[1] + ")\" value=\"" + buyInfo.setNum2 + "\"></td>\n          <td><input type=\"number\" o-blur=\"changeM2N(" + item[1] + ")\" value=\"" + buyInfo.setNum2Money + "\"></td>\n          <td>" + item[41] + "%</td>\n          <td>" + ((item[2] - buyInfo["in"]) * buyInfo.num).toFixed(2) + "\u5143</td>\n          <td><b style=\"color: red\">" + (buyInfo["in"] * (100 - parseFloat(buyInfo.setNum)) / 100).toFixed(2) + "</b>\u5143</td>\n          <td><b style=\"color: red\">" + (buyInfo["in"] * (100 + parseFloat(buyInfo.setNum2)) / 100).toFixed(2) + "</b>\u5143</td>\n          <td>" + buyInfo.setNumTime + "</td>\n          <td>" + buyInfo.setNum2Time + "</td>\n          <td><span o-tap=\"delateKey('" + element + "')\">\u5220\u9664</span><span o-tap=\"jiacang('" + element + "')\">\u52A0\u4ED3</span><span o-tap=\"qingcang('" + element + "')\">\u6E05\u4ED3</span></td>\n          </tr>";
       }); // console.log(this)
 
       this.query('table').innerHTML = newHtml;
       this.query('.log-box').innerHTML = this.data.userInfo.log;
       setTimeout(function () {
-        _this.handleEvent(_this, _this.query('tbody'));
+        _this2.handleEvent(_this2, _this2.query('tbody'));
       }, 100);
     },
     "add": function add() {
-      var _this2 = this;
+      var _this3 = this;
 
       var requestOptions = {
         method: 'POST',
@@ -140,22 +143,20 @@ owo.script = {
         if (result.err == 0) {
           if (result.num > 0) {
             for (var key in result.data) {
-              if (result.data.hasOwnProperty.call(result.data, key)) {
-                var element = result.data[key];
-                element.setNumMoney = 5000;
-                element.setNum2Money = 5000;
+              var element = result.data[key];
+              element.setNumMoney = 5000;
+              element.setNum2Money = 5000;
 
-                _this2.data.userInfo.like.push(key);
+              _this3.data.userInfo.like.push(key);
 
-                _this2.data.userInfo.data[key] = element;
+              _this3.data.userInfo.data[key] = element;
 
-                _this2.jiacang(key);
-              }
+              _this3.jiacang(key);
             }
 
-            _this2.creatTable();
+            _this3.creatTable();
 
-            saveUserInfo(_this2.data.userInfo);
+            saveUserInfo(_this3.data.userInfo);
           } else {
             alert('股票代码错误!');
           }
@@ -165,47 +166,47 @@ owo.script = {
       });
     },
     "changeM": function changeM(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       console.log(this.$target.value);
       this.data.userInfo.buyInfo[id].setNum = this.$target.value;
       saveUserInfo(this.data.userInfo);
       setTimeout(function () {
-        _this3.creatTable();
+        _this4.creatTable();
       }, 0);
     },
     "changeMN": function changeMN(id) {
-      var _this4 = this;
+      var _this5 = this;
 
       this.data.userInfo.buyInfo[id].setNumMoney = this.$target.value;
       console.log(this.data.userInfo.buyInfo[id]);
       saveUserInfo(this.data.userInfo);
       setTimeout(function () {
-        _this4.creatTable();
+        _this5.creatTable();
       }, 0);
     },
     "changeM2": function changeM2(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       console.log(this.$target.value);
       this.data.userInfo.buyInfo[id].setNum2 = this.$target.value;
       saveUserInfo(this.data.userInfo);
       setTimeout(function () {
-        _this5.creatTable();
+        _this6.creatTable();
       }, 0);
     },
     "changeM2N": function changeM2N(id) {
-      var _this6 = this;
+      var _this7 = this;
 
       console.log(this.$target.value);
       this.data.userInfo.buyInfo[id].setNum2Money = this.$target.value;
       saveUserInfo(this.data.userInfo);
       setTimeout(function () {
-        _this6.creatTable();
+        _this7.creatTable();
       }, 0);
     },
     "delateKey": function delateKey(key) {
-      var _this7 = this;
+      var _this8 = this;
 
       this.qingcang(key);
       var newList = [];
@@ -219,16 +220,16 @@ owo.script = {
       this.data.userInfo.data[key] = [];
       saveUserInfo(this.data.userInfo);
       setTimeout(function () {
-        _this7.creatTable();
+        _this8.creatTable();
       }, 100);
     },
     "updata": function updata() {
-      var _this8 = this;
+      var _this9 = this;
 
       if (!this.data.userInfo.like || this.data.userInfo.like.lenghth == 0) {
         setTimeout(function () {
-          _this8.updata();
-        }, 1000);
+          _this9.updata();
+        }, 2000);
         return;
       }
 
@@ -240,23 +241,23 @@ owo.script = {
       fetch("https://going.run/gupiao?route=query", requestOptions).then(function (response) {
         return response.json();
       }).then(function (result) {
-        _this8.data.userInfo.like = []; // console.log(result)
+        _this9.data.userInfo.like = []; // console.log(result)
 
         for (var key in result.data) {
           if (result.data.hasOwnProperty.call(result.data, key)) {
             var element = result.data[key];
 
-            _this8.data.userInfo.like.push(key);
+            _this9.data.userInfo.like.push(key);
 
-            _this8.data.userInfo.data[key] = element;
+            _this9.data.userInfo.data[key] = element;
           }
         }
 
-        _this8.creatTable();
+        _this9.creatTable();
 
         setTimeout(function () {
-          _this8.updata();
-        }, 1000);
+          _this9.updata();
+        }, 2000);
       })["catch"](function (error) {
         return console.log('error', error);
       });
@@ -302,29 +303,29 @@ owo.script = {
       saveUserInfo(this.data.userInfo);
     },
     "addAll": function addAll() {
-      var _this9 = this;
+      var _this10 = this;
 
       console.log('全部加仓!');
       this.data.userInfo.like.forEach(function (element) {
-        _this9.jiacang(element);
+        _this10.jiacang(element);
       });
     },
     "clearAll": function clearAll() {
-      var _this10 = this;
+      var _this11 = this;
 
       console.log('全部清仓!');
       this.data.userInfo.like.forEach(function (element) {
-        _this10.qingcang(element);
+        _this11.qingcang(element);
       });
     },
     "clear10": function clear10() {
-      var _this11 = this;
+      var _this12 = this;
 
       console.log('全部减仓10%!');
       this.data.userInfo.like.forEach(function (element) {
-        var clearNumber = _this11.data.userInfo.buyInfo[element].num * 0.1;
+        var clearNumber = _this12.data.userInfo.buyInfo[element].num * 0.1;
 
-        _this11.qingcang(element, clearNumber);
+        _this12.qingcang(element, clearNumber);
       });
     },
     "clearLog": function clearLog() {
