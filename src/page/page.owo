@@ -86,6 +86,7 @@
       <th style="width: 65px;">预卖价</th>
       <th style="width: 65px;">低吸次数</th>
       <th style="width: 65px;">高抛次数</th>
+      <th style="width: 35px;">微信提醒</th>
       <th>其他操作</th>
       </tr>`
       const gupiaoData = this.data.userInfo.data
@@ -126,6 +127,7 @@
           <td><b style="color: red">${(buyInfo.in * (100 + parseFloat(buyInfo.setNum2)) / 100).toFixed(2)}</b>元</td>
           <td>${buyInfo.setNumTime}</td>
           <td>${buyInfo.setNum2Time}</td>
+          <td><input type="number" o-blur="changeWeixin(${item[1]})" value="${buyInfo.setWeixin ? 1 : 0}"></td>
           <td><span o-tap="delateKey('${element}')">删除</span><span o-tap="jiacang('${element}')">加仓20%</span><span o-tap="clear20item('${element}')">减仓20%</span></td>
           </tr>`
       })
@@ -194,6 +196,14 @@
     changeM2N: function (id) {
       console.log(this.$target.value)
       this.data.userInfo.buyInfo[id].setNum2Money = this.$target.value
+      saveUserInfo(this.data.userInfo)
+      setTimeout(() => {
+        this.creatTable()
+      }, 0);
+    },
+    changeWeixin: function () {
+      console.log(this.$target.value)
+      this.data.userInfo.buyInfo[id].setWeixin = this.$target.value
       saveUserInfo(this.data.userInfo)
       setTimeout(() => {
         this.creatTable()
