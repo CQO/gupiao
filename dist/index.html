@@ -19,7 +19,7 @@
   <meta name="catalogs" content="{TAG_83943_TAG}" />
 
   <!-- 页面主样式文件 -->
-  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.owjrhgc85ol.css">
+  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.afki74p17ir.css">
 
   <!-- 附属css文件 -->
   <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
@@ -49,7 +49,7 @@
   </div>
 
   <!-- 框架script文件 -->
-  <script src="./static/js/owo.core.owjrhgc85ol.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="./static/js/owo.core.afki74p17ir.js" type="text/javascript" charset="UTF-8"></script>
   <script type="text/javascript" charset="UTF-8">
     // 模块 page 的script代码
     var appType = 'gupiao';
@@ -270,14 +270,10 @@
           fetch("https://going.run/gupiao?route=query", requestOptions).then(function(response) {
             return response.json();
           }).then(function(result) {
-            _this10.data.userInfo.like = []; // console.log(result)
-
+            // console.log(result)
             for (var key in result.data) {
               if (result.data.hasOwnProperty.call(result.data, key)) {
                 var element = result.data[key];
-
-                _this10.data.userInfo.like.push(key);
-
                 _this10.data.userInfo.data[key] = element;
               }
             }

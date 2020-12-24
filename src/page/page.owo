@@ -243,12 +243,10 @@
       fetch("https://going.run/gupiao?route=query", requestOptions)
         .then(response => response.json())
         .then((result) => {
-          this.data.userInfo.like = []
           // console.log(result)
           for (const key in result.data) {
             if (result.data.hasOwnProperty.call(result.data, key)) {
               const element = result.data[key];
-              this.data.userInfo.like.push(key)
               this.data.userInfo.data[key] = element
             }
           }
