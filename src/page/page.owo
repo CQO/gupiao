@@ -153,11 +153,11 @@
             if (result.num > 0) {
               for (const key in result.data) {
                 const element = result.data[key];
-                element.setNumMoney = 5000
-                element.setNum2Money = 5000
+                element.setNumMoney = 10000
+                element.setNum2Money = 10000
                 this.data.userInfo.like.push(key)
                 this.data.userInfo.data[key] = element
-                this.jiacang(key, 5000)
+                this.jiacang(key, 10000)
               }
               
               this.creatTable()
@@ -201,7 +201,7 @@
         this.creatTable()
       }, 0);
     },
-    changeWeixin: function () {
+    changeWeixin: function (id) {
       console.log(this.$target.value)
       this.data.userInfo.buyInfo[id].setWeixin = this.$target.value
       saveUserInfo(this.data.userInfo)
@@ -221,6 +221,8 @@
       console.log(newList)
       this.data.userInfo.like = newList
       this.data.userInfo.data[key] = []
+      this.data.userInfo.buyInfo[key].setNum2Time = 0
+      this.data.userInfo.buyInfo[key].setNumTime = 0
       saveUserInfo(this.data.userInfo)
       setTimeout(() => {
         this.creatTable()
@@ -259,6 +261,7 @@
     },
     jiacang: function (key, number) {
       number = number || (this.data.userInfo.buyInfo[key].num * 0.2)
+      if (!number) { number = 10000}
       console.log(key)
       if (!this.data.userInfo.buyInfo[key]) {
         this.data.userInfo.buyInfo[key] = {
@@ -285,6 +288,7 @@
       }
       let userBuyNum = this.data.userInfo.buyInfo[key].num
       clearNumber = clearNumber || userBuyNum
+      if (!clearNumber) { clearNumber = 10000}
       this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2]
       console.log(this.data.userInfo.data[key][2], userBuyNum)
       this.data.userInfo.allNumber += (this.data.userInfo.data[key][2] * clearNumber)
@@ -293,8 +297,7 @@
       let yingkui = (outNum - inNum) * clearNumber
       this.data.userInfo.log += `${this.data.userInfo.data[key][0]} 买入价格 ${inNum} 卖出价格 ${outNum} 盈利 ${yingkui.toFixed(2)}元;<br>`
       this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - clearNumber
-      this.data.userInfo.buyInfo[key].setNum2Time = 0
-      this.data.userInfo.buyInfo[key].setNumTime = 0
+      
       saveUserInfo(this.data.userInfo)
     },
     addAll: function () {

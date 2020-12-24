@@ -19,7 +19,7 @@
   <meta name="catalogs" content="{TAG_83943_TAG}" />
 
   <!-- 页面主样式文件 -->
-  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.afki74p17ir.css">
+  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.jzt1r0l84pg.css">
 
   <!-- 附属css文件 -->
   <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
@@ -49,7 +49,7 @@
   </div>
 
   <!-- 框架script文件 -->
-  <script src="./static/js/owo.core.afki74p17ir.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="./static/js/owo.core.jzt1r0l84pg.js" type="text/javascript" charset="UTF-8"></script>
   <script type="text/javascript" charset="UTF-8">
     // 模块 page 的script代码
     var appType = 'gupiao';
@@ -163,14 +163,14 @@
               if (result.num > 0) {
                 for (var key in result.data) {
                   var element = result.data[key];
-                  element.setNumMoney = 5000;
-                  element.setNum2Money = 5000;
+                  element.setNumMoney = 10000;
+                  element.setNum2Money = 10000;
 
                   _this3.data.userInfo.like.push(key);
 
                   _this3.data.userInfo.data[key] = element;
 
-                  _this3.jiacang(key, 5000);
+                  _this3.jiacang(key, 10000);
                 }
 
                 _this3.creatTable();
@@ -224,7 +224,7 @@
             _this7.creatTable();
           }, 0);
         },
-        "changeWeixin": function changeWeixin() {
+        "changeWeixin": function changeWeixin(id) {
           var _this8 = this;
 
           console.log(this.$target.value);
@@ -247,6 +247,8 @@
           console.log(newList);
           this.data.userInfo.like = newList;
           this.data.userInfo.data[key] = [];
+          this.data.userInfo.buyInfo[key].setNum2Time = 0;
+          this.data.userInfo.buyInfo[key].setNumTime = 0;
           saveUserInfo(this.data.userInfo);
           setTimeout(function() {
             _this9.creatTable();
@@ -289,6 +291,11 @@
         },
         "jiacang": function jiacang(key, number) {
           number = number || this.data.userInfo.buyInfo[key].num * 0.2;
+
+          if (!number) {
+            number = 10000;
+          }
+
           console.log(key);
 
           if (!this.data.userInfo.buyInfo[key]) {
@@ -318,6 +325,11 @@
 
           var userBuyNum = this.data.userInfo.buyInfo[key].num;
           clearNumber = clearNumber || userBuyNum;
+
+          if (!clearNumber) {
+            clearNumber = 10000;
+          }
+
           this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2];
           console.log(this.data.userInfo.data[key][2], userBuyNum);
           this.data.userInfo.allNumber += this.data.userInfo.data[key][2] * clearNumber;
@@ -326,8 +338,6 @@
           var yingkui = (outNum - inNum) * clearNumber;
           this.data.userInfo.log += this.data.userInfo.data[key][0] + " \u4E70\u5165\u4EF7\u683C " + inNum + " \u5356\u51FA\u4EF7\u683C " + outNum + " \u76C8\u5229 " + yingkui.toFixed(2) + "\u5143;<br>";
           this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - clearNumber;
-          this.data.userInfo.buyInfo[key].setNum2Time = 0;
-          this.data.userInfo.buyInfo[key].setNumTime = 0;
           saveUserInfo(this.data.userInfo);
         },
         "addAll": function addAll() {
