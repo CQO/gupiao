@@ -122,9 +122,9 @@
           <td><input type="number" o-blur="changeM2(${item[1]})" value="${buyInfo.setNum2}" step="0.1"></td>
           <td><input type="number" o-blur="changeM2N(${item[1]})" value="${buyInfo.setNum2Money}" step="1000"></td>
           <td>${item[41]}%</td>
-          <td>${((item[2] - buyInfo.in) * buyInfo.num).toFixed(2)}元</td>
-          <td><b style="color: red">${(buyInfo.in * (100 - parseFloat(buyInfo.setNum)) / 100).toFixed(2)}</b>元</td>
-          <td><b style="color: red">${(buyInfo.in * (100 + parseFloat(buyInfo.setNum2)) / 100).toFixed(2)}</b>元</td>
+          <td>${((item[2] - buyInfo.in) * buyInfo.num).toFixed(2)}</td>
+          <td><b style="color: red">${(buyInfo.in * (100 - parseFloat(buyInfo.setNum)) / 100).toFixed(2)}</b></td>
+          <td><b style="color: red">${(buyInfo.in * (100 + parseFloat(buyInfo.setNum2)) / 100).toFixed(2)}</b></td>
           <td>${buyInfo.setNumTime}</td>
           <td>${buyInfo.setNum2Time}</td>
           <td><input type="number" o-blur="changeWeixin(${item[1]})" value="${buyInfo.setWeixin ? 1 : 0}"></td>
