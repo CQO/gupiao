@@ -128,7 +128,7 @@
           <td>${buyInfo.setNumTime}</td>
           <td>${buyInfo.setNum2Time}</td>
           <td><input type="number" o-blur="changeWeixin(${item[1]})" value="${buyInfo.setWeixin ? 1 : 0}"></td>
-          <td><span o-tap="delateKey('${element}')">删除</span><span o-tap="jiacang('${element}')">加仓20%</span><span o-tap="clear20item('${element}')">减仓20%</span></td>
+          <td><span o-tap="delateKey('${element}')">删除</span><span o-tap="jiacang('${element}')">加仓</span><span o-tap="clear20item('${element}')">减仓</span></td>
           </tr>`
       })
       // console.log(this)
@@ -260,8 +260,7 @@
         .catch(error => console.log('error', error));
     },
     jiacang: function (key, number) {
-      number = number || (this.data.userInfo.buyInfo[key].num * 0.2)
-      if (!number) { number = 10000}
+      number = number || 10000
       console.log(key)
       if (!this.data.userInfo.buyInfo[key]) {
         this.data.userInfo.buyInfo[key] = {
@@ -290,13 +289,12 @@
       clearNumber = clearNumber || userBuyNum
       if (!clearNumber) { clearNumber = 10000}
       this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2]
-      console.log(this.data.userInfo.data[key][2], userBuyNum)
       this.data.userInfo.allNumber += (this.data.userInfo.data[key][2] * clearNumber)
       let inNum = this.data.userInfo.buyInfo[key].in
       let outNum = this.data.userInfo.buyInfo[key].out
       let yingkui = (outNum - inNum) * clearNumber
       this.data.userInfo.log += `${this.data.userInfo.data[key][0]} 买入价格 ${inNum} 卖出价格 ${outNum} 盈利 ${yingkui.toFixed(2)}元;<br>`
-      this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - clearNumber
+      this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - (clearNumber / this.data.userInfo.data[key][2])
       
       saveUserInfo(this.data.userInfo)
     },
@@ -313,9 +311,8 @@
       });
     },
     clear20item: function (element) {
-      console.log('项目减仓20%!')
-      const clearNumber = this.data.userInfo.buyInfo[element].num * 0.2
-      this.qingcang(element, clearNumber)
+      console.log('项目减仓10000!')
+      this.qingcang(element, 10000)
     },
     clear10: function () {
       console.log('全部减仓10%!')
