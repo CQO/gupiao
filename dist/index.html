@@ -19,7 +19,7 @@
   <meta name="catalogs" content="{TAG_83943_TAG}" />
 
   <!-- 页面主样式文件 -->
-  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.u99rudc8ib.css">
+  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.6uadfvzpfxs.css">
 
   <!-- 附属css文件 -->
   <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
@@ -49,7 +49,7 @@
   </div>
 
   <!-- 框架script文件 -->
-  <script src="./static/js/owo.core.u99rudc8ib.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="./static/js/owo.core.6uadfvzpfxs.js" type="text/javascript" charset="UTF-8"></script>
   <script type="text/javascript" charset="UTF-8">
     // 模块 page 的script代码
     var appType = 'gupiao';
@@ -113,7 +113,7 @@
           }
 
           this.query('.my-code').innerText = '我的资金:' + this.data.userInfo.allNumber.toFixed(2);
-          var newHtml = "<tr>\n      <th style=\"width: 35px;\">\u7F16\u53F7</th>\n      <th style=\"width: 45px;\">\u80A1\u7968\u4EE3\u7801</th>\n      <th style=\"width: 65px;\">\u80A1\u7968\u540D\u79F0</th>\n      <th style=\"width: 65px;\">\u76D1\u63A7\u4EF7</th>\n      <th style=\"width: 65px;\">\u5F53\u524D\u4EF7\u683C</th>\n      <th style=\"width: 65px;\">\u6301\u4ED3\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438%</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B%</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u6CE2\u52A8\u7387%</th>\n      <th style=\"width: 65px;\">\u6EDA\u52A8\u76C8\u5229</th>\n      <th style=\"width: 65px;\">\u9884\u4E70\u4EF7</th>\n      <th style=\"width: 65px;\">\u9884\u5356\u4EF7</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u6B21\u6570</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u6B21\u6570</th>\n      <th style=\"width: 35px;\">\u5FAE\u4FE1\u63D0\u9192</th>\n      <th>\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
+          var newHtml = "<tr>\n      <th style=\"width: 35px;\">\u7F16\u53F7</th>\n      <th style=\"width: 45px;\">\u80A1\u7968\u4EE3\u7801</th>\n      <th style=\"width: 65px;\">\u80A1\u7968\u540D\u79F0</th>\n      <th style=\"width: 65px;\">\u76D1\u63A7\u4EF7</th>\n      <th style=\"width: 65px;\">\u5F53\u524D\u4EF7\u683C</th>\n      <th style=\"width: 65px;\">\u6301\u4ED3\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438%</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B%</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u91D1\u989D</th>\n      <th style=\"width: 65px;\">\u6CE2\u52A8\u7387%</th>\n      <th style=\"width: 65px;\">\u6301\u4ED3\u76C8\u5229</th>\n      <th style=\"width: 65px;\">\u9884\u4E70\u4EF7</th>\n      <th style=\"width: 65px;\">\u9884\u5356\u4EF7</th>\n      <th style=\"width: 65px;\">\u4F4E\u5438\u6B21\u6570</th>\n      <th style=\"width: 65px;\">\u9AD8\u629B\u6B21\u6570</th>\n      <th style=\"width: 35px;\">\u5FAE\u4FE1\u63D0\u9192</th>\n      <th style=\"width: 100px;\">\u5176\u4ED6\u64CD\u4F5C</th>\n      </tr>";
           var gupiaoData = this.data.userInfo.data;
           var ind = 0;
           this.data.userInfo.like.forEach(function(element) {
@@ -163,14 +163,14 @@
               if (result.num > 0) {
                 for (var key in result.data) {
                   var element = result.data[key];
-                  element.setNumMoney = 10000;
-                  element.setNum2Money = 10000;
+                  element.setNumMoney = 50000;
+                  element.setNum2Money = 50000;
 
                   _this3.data.userInfo.like.push(key);
 
                   _this3.data.userInfo.data[key] = element;
 
-                  _this3.jiacang(key, 10000);
+                  _this3.jiacang(key, 50000);
                 }
 
                 _this3.creatTable();
