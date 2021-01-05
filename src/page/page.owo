@@ -8,9 +8,9 @@
   .conn
     table.pure-table
   .tool-box
-    .button(o-tap="addAll") 全部加仓
-    .button(o-tap="clearAll") 全部清仓
-    .button(o-tap="clear10") 全部减仓10%
+    .button(o-tap="addAll") 全部加一万
+    .button(o-tap="clearAll") 全部删除
+    .button(o-tap="clear10") 全部减仓一万
     .button(o-tap="clearLog") 清理日志
   .log-box
 </template>
@@ -279,6 +279,7 @@
       this.data.userInfo.buyInfo[key].num += (number / nowP)
       
       saveUserInfo(this.data.userInfo)
+      new Audio("@|113.mp3|").play()
     },
     qingcang: function (key, clearNumber) {
       
@@ -297,6 +298,7 @@
       this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - (clearNumber / this.data.userInfo.data[key][2])
       
       saveUserInfo(this.data.userInfo)
+      new Audio("@|113.mp3|").play()
     },
     addAll: function () {
       console.log('全部加仓!')
@@ -309,6 +311,10 @@
       this.data.userInfo.like.forEach(element => {
         this.qingcang(element)
       });
+      setTimeout(() => {
+        this.data.userInfo.like = []
+        saveUserInfo(this.data.userInfo)
+      }, 400);
     },
     clear20item: function (element) {
       console.log('项目减仓10000!')
@@ -317,8 +323,8 @@
     clear10: function () {
       console.log('全部减仓10%!')
       this.data.userInfo.like.forEach(element => {
-        const clearNumber = this.data.userInfo.buyInfo[element].num * 0.1
-        this.qingcang(element, clearNumber)
+        // const clearNumber = this.data.userInfo.buyInfo[element].num * 0.1
+        this.qingcang(element, 10000)
       });
     },
     clearLog: function () {
