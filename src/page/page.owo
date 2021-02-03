@@ -261,7 +261,7 @@
     },
     jiacang: function (key, number) {
       number = number || 10000
-      console.log(key)
+      console.log(nowP)
       if (!this.data.userInfo.buyInfo[key]) {
         this.data.userInfo.buyInfo[key] = {
           num: 0,
@@ -271,6 +271,7 @@
       }
       this.data.userInfo.allNumber -= number
       let nowP = this.data.userInfo.data[key][2]
+      console.log('sdsd')
       if (this.data.userInfo.buyInfo[key].num == 0) {
         this.data.userInfo.buyInfo[key].in = nowP
       } else {
@@ -282,20 +283,30 @@
       new Audio("@|113.mp3|").play()
     },
     qingcang: function (key, clearNumber) {
-      
+      let nowP = this.data.userInfo.data[key][2]
       if (!this.data.userInfo.buyInfo[key] || this.data.userInfo.buyInfo[key].num == 0) {
         return
       }
       let userBuyNum = this.data.userInfo.buyInfo[key].num
-      clearNumber = clearNumber || userBuyNum
-      if (!clearNumber) { clearNumber = 10000}
-      this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2]
-      this.data.userInfo.allNumber += (this.data.userInfo.data[key][2] * clearNumber)
       let inNum = this.data.userInfo.buyInfo[key].in
-      let outNum = this.data.userInfo.buyInfo[key].out
-      let yingkui = (outNum - inNum) * clearNumber
-      this.data.userInfo.log += `${this.data.userInfo.data[key][0]} 买入价格 ${inNum} 卖出价格 ${outNum} 盈利 ${yingkui.toFixed(2)}元;<br>`
-      this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - (clearNumber / this.data.userInfo.data[key][2])
+      if (!clearNumber || clearNumber >= userBuyNum) {
+        this.data.userInfo.buyInfo[key] = null
+        this.data.userInfo.allNumber += (nowP - inNum) * userBuyNum
+        this.data.userInfo.log += `${this.data.userInfo.data[key][0]} 买入价格 ${inNum} 卖出价格 ${nowP} 盈利 ${((nowP - inNum) * userBuyNum).toFixed(2)}元;<br>`
+      } else {
+        clearNumber = clearNumber || userBuyNum
+        if (!clearNumber) { clearNumber = 10000}
+        this.data.userInfo.buyInfo[key].out = nowP
+        this.data.userInfo.allNumber += (nowP * clearNumber)
+        
+        let outNum = this.data.userInfo.buyInfo[key].out
+        let yingkui = (outNum - inNum) * clearNumber
+        this.data.userInfo.log += `${this.data.userInfo.data[key][0]} 买入价格 ${inNum} 卖出价格 ${outNum} 盈利 ${yingkui.toFixed(2)}元;<br>`
+        this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - (clearNumber / this.data.userInfo.data[key][2])
+      }
+      
+      
+      
       
       saveUserInfo(this.data.userInfo)
       new Audio("@|113.mp3|").play()

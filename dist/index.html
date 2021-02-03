@@ -19,7 +19,7 @@
   <meta name="catalogs" content="{TAG_83943_TAG}" />
 
   <!-- 页面主样式文件 -->
-  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.ca99mgzhgs.css">
+  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.core.3whrgq6h6wq.css">
 
   <!-- 附属css文件 -->
   <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
@@ -49,7 +49,7 @@
   </div>
 
   <!-- 框架script文件 -->
-  <script src="./static/js/owo.core.ca99mgzhgs.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="./static/js/owo.core.3whrgq6h6wq.js" type="text/javascript" charset="UTF-8"></script>
   <script type="text/javascript" charset="UTF-8">
     // 模块 page 的script代码
     var appType = 'gupiao';
@@ -291,7 +291,7 @@
         },
         "jiacang": function jiacang(key, number) {
           number = number || 10000;
-          console.log(key);
+          console.log(nowP);
 
           if (!this.data.userInfo.buyInfo[key]) {
             this.data.userInfo.buyInfo[key] = {
@@ -303,6 +303,7 @@
 
           this.data.userInfo.allNumber -= number;
           var nowP = this.data.userInfo.data[key][2];
+          console.log('sdsd');
 
           if (this.data.userInfo.buyInfo[key].num == 0) {
             this.data.userInfo.buyInfo[key]["in"] = nowP;
@@ -315,24 +316,34 @@
           new Audio("./static/resource/113.mp3").play();
         },
         "qingcang": function qingcang(key, clearNumber) {
+          var nowP = this.data.userInfo.data[key][2];
+
           if (!this.data.userInfo.buyInfo[key] || this.data.userInfo.buyInfo[key].num == 0) {
             return;
           }
 
           var userBuyNum = this.data.userInfo.buyInfo[key].num;
-          clearNumber = clearNumber || userBuyNum;
+          var inNum = this.data.userInfo.buyInfo[key]["in"];
 
-          if (!clearNumber) {
-            clearNumber = 10000;
+          if (!clearNumber || clearNumber >= userBuyNum) {
+            this.data.userInfo.buyInfo[key] = null;
+            this.data.userInfo.allNumber += (nowP - inNum) * userBuyNum;
+            this.data.userInfo.log += this.data.userInfo.data[key][0] + " \u4E70\u5165\u4EF7\u683C " + inNum + " \u5356\u51FA\u4EF7\u683C " + nowP + " \u76C8\u5229 " + ((nowP - inNum) * userBuyNum).toFixed(2) + "\u5143;<br>";
+          } else {
+            clearNumber = clearNumber || userBuyNum;
+
+            if (!clearNumber) {
+              clearNumber = 10000;
+            }
+
+            this.data.userInfo.buyInfo[key].out = nowP;
+            this.data.userInfo.allNumber += nowP * clearNumber;
+            var outNum = this.data.userInfo.buyInfo[key].out;
+            var yingkui = (outNum - inNum) * clearNumber;
+            this.data.userInfo.log += this.data.userInfo.data[key][0] + " \u4E70\u5165\u4EF7\u683C " + inNum + " \u5356\u51FA\u4EF7\u683C " + outNum + " \u76C8\u5229 " + yingkui.toFixed(2) + "\u5143;<br>";
+            this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - clearNumber / this.data.userInfo.data[key][2];
           }
 
-          this.data.userInfo.buyInfo[key].out = this.data.userInfo.data[key][2];
-          this.data.userInfo.allNumber += this.data.userInfo.data[key][2] * clearNumber;
-          var inNum = this.data.userInfo.buyInfo[key]["in"];
-          var outNum = this.data.userInfo.buyInfo[key].out;
-          var yingkui = (outNum - inNum) * clearNumber;
-          this.data.userInfo.log += this.data.userInfo.data[key][0] + " \u4E70\u5165\u4EF7\u683C " + inNum + " \u5356\u51FA\u4EF7\u683C " + outNum + " \u76C8\u5229 " + yingkui.toFixed(2) + "\u5143;<br>";
-          this.data.userInfo.buyInfo[key].num = this.data.userInfo.buyInfo[key].num - clearNumber / this.data.userInfo.data[key][2];
           saveUserInfo(this.data.userInfo);
           new Audio("./static/resource/113.mp3").play();
         },
